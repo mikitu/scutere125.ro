@@ -6,9 +6,9 @@ import { Phone, Mail, MapPin, Facebook, Instagram, Youtube } from 'lucide-react'
 
 const footerLinks = {
   scutere: [
-    { href: '/scutere/sh-mode-125', label: 'Honda SH Mode 125' },
-    { href: '/scutere/pcx-125', label: 'Honda PCX 125' },
-    { href: '/scutere/forza-125', label: 'Honda Forza 125' },
+    { href: '/scutere-125/sh-mode-125', label: 'Honda SH Mode 125' },
+    { href: '/scutere-125/pcx-125', label: 'Honda PCX 125' },
+    { href: '/scutere-125/forza-125', label: 'Honda Forza 125' },
   ],
   informatii: [
     { href: '/despre', label: 'Despre noi' },
@@ -53,9 +53,9 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Scutere */}
+          {/* Scutere 125cc */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Scutere</h4>
+            <h4 className="text-white font-semibold mb-4">Scutere 125cc</h4>
             <ul className="space-y-2">
               {footerLinks.scutere.map((link) => (
                 <li key={link.href}>
@@ -85,17 +85,21 @@ export function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-3">
-              <li className="flex items-center gap-3 text-white/60 text-sm">
-                <Phone className="w-4 h-4 text-primary" />
-                <span>0700 000 000</span>
+              <li>
+                <a href="tel:+40752312097" className="flex items-center gap-3 text-white/60 text-sm hover:text-white transition-colors">
+                  <Phone className="w-4 h-4 text-primary" />
+                  <span>+40 752 312 097</span>
+                </a>
               </li>
-              <li className="flex items-center gap-3 text-white/60 text-sm">
-                <Mail className="w-4 h-4 text-primary" />
-                <span>contact@scutere125.ro</span>
+              <li>
+                <a href="mailto:contact@scutere125.ro" className="flex items-center gap-3 text-white/60 text-sm hover:text-white transition-colors">
+                  <Mail className="w-4 h-4 text-primary" />
+                  <span>contact@scutere125.ro</span>
+                </a>
               </li>
               <li className="flex items-start gap-3 text-white/60 text-sm">
                 <MapPin className="w-4 h-4 text-primary mt-0.5" />
-                <span>București, România</span>
+                <span>Str. Selimbar nr.10, Brebu Mânăstirei, Prahova</span>
               </li>
             </ul>
           </div>

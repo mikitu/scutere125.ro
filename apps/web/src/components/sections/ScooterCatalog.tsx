@@ -64,13 +64,17 @@ export function ScooterCatalog() {
                       </div>
                     )}
                     <motion.div
-                      className="absolute inset-0 flex items-center justify-center"
+                      className="absolute inset-0 flex items-center justify-center p-6"
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                        <span className="text-8xl">🛵</span>
-                      </div>
+                      <Image
+                        src={scooter.listingImage}
+                        alt={scooter.name}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
                     </motion.div>
                   </div>
 
@@ -126,7 +130,7 @@ export function ScooterCatalog() {
                           )}
                         </p>
                       </div>
-                      <Link href={`/scutere/${scooter.slug}`}>
+                      <Link href={`/scutere-125/${scooter.slug}`}>
                         <Button variant="primary" size="lg">
                           Vezi detalii <ArrowRight className="w-5 h-5" />
                         </Button>

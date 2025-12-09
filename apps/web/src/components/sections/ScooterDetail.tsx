@@ -8,6 +8,7 @@ import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
+import { ImageGallery } from '@/components/ui/ImageGallery';
 
 interface ScooterDetailProps {
   scooter: Scooter;
@@ -42,7 +43,7 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <Link href="/scutere" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors">
+          <Link href="/scutere-125" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Înapoi la catalog
           </Link>
@@ -54,40 +55,20 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
+            className="relative"
           >
-            <Card className="overflow-hidden">
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-white/5 to-transparent">
-                {scooter.badge && (
-                  <div className="absolute top-6 left-6 z-10">
-                    <Badge variant={scooter.category === 'premium' ? 'accent' : scooter.category === 'sport' ? 'primary' : 'success'}>
-                      {scooter.badge}
-                    </Badge>
-                  </div>
-                )}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="text-9xl"
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 4, repeat: Infinity }}
-                  >
-                    🛵
-                  </motion.div>
-                </div>
+            {scooter.badge && (
+              <div className="absolute top-6 left-6 z-10">
+                <Badge variant={scooter.category === 'premium' ? 'accent' : scooter.category === 'sport' ? 'primary' : 'success'}>
+                  {scooter.badge}
+                </Badge>
               </div>
-            </Card>
-
-            {/* Thumbnail gallery */}
-            <div className="grid grid-cols-3 gap-4 mt-4">
-              {[1, 2, 3].map((i) => (
-                <motion.div
-                  key={i}
-                  whileHover={{ scale: 1.05 }}
-                  className="aspect-[4/3] rounded-xl bg-white/5 border border-white/10 hover:border-primary/50 cursor-pointer transition-colors flex items-center justify-center"
-                >
-                  <span className="text-4xl opacity-50">🛵</span>
-                </motion.div>
-              ))}
-            </div>
+            )}
+            <ImageGallery
+              images={scooter.gallery}
+              mainImage={scooter.image}
+              alt={scooter.name}
+            />
           </motion.div>
 
           {/* Product info */}

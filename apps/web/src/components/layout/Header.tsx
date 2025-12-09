@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button';
 
 const navLinks = [
   { href: '/', label: 'Acasă' },
-  { href: '/scutere', label: 'Scutere' },
+  { href: '/scutere-125', label: 'Scutere 125cc' },
   { href: '/despre', label: 'Despre noi' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -67,9 +67,9 @@ export function Header() {
 
             {/* CTA Button */}
             <div className="hidden md:flex items-center gap-4">
-              <a href="tel:+40700000000" className="flex items-center gap-2 text-white/80 hover:text-white">
+              <a href="tel:+40752312097" className="flex items-center gap-2 text-white/80 hover:text-white">
                 <Phone className="w-4 h-4" />
-                <span>0700 000 000</span>
+                <span>0752 312 097</span>
               </a>
               <Button variant="primary" size="sm">
                 Solicită ofertă

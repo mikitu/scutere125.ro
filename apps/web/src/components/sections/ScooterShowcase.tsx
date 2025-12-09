@@ -47,8 +47,8 @@ export function ScooterShowcase() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
             >
               <Card className="h-full flex flex-col overflow-hidden group">
-                {/* Image container */}
-                <div className="relative h-64 bg-gradient-to-br from-white/5 to-transparent overflow-hidden">
+                {/* Image container - landscape aspect ratio */}
+                <div className="relative aspect-[16/10] bg-gradient-to-br from-white/5 to-transparent overflow-hidden">
                   {scooter.badge && (
                     <div className="absolute top-4 left-4 z-10">
                       <Badge variant={scooter.category === 'premium' ? 'accent' : scooter.category === 'sport' ? 'primary' : 'success'}>
@@ -57,14 +57,17 @@ export function ScooterShowcase() {
                     </div>
                   )}
                   <motion.div
-                    className="absolute inset-0 flex items-center justify-center"
-                    whileHover={{ scale: 1.1 }}
+                    className="absolute inset-0"
+                    whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.5 }}
                   >
-                    {/* Placeholder for scooter image */}
-                    <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                      <span className="text-6xl">🛵</span>
-                    </div>
+                    <Image
+                      src={scooter.listingImage}
+                      alt={scooter.name}
+                      fill
+                      className="object-cover object-center"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
                   </motion.div>
                   {/* Glow effect on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
@@ -105,7 +108,7 @@ export function ScooterShowcase() {
                         {formatPrice(scooter.price)}
                       </p>
                     </div>
-                    <Link href={`/scutere/${scooter.slug}`}>
+                    <Link href={`/scutere-125/${scooter.slug}`}>
                       <Button variant="primary" size="sm">
                         Detalii <ArrowRight className="w-4 h-4" />
                       </Button>
@@ -124,7 +127,7 @@ export function ScooterShowcase() {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="text-center mt-12"
         >
-          <Button variant="outline" size="lg" href="/scutere">
+          <Button variant="outline" size="lg" href="/scutere-125">
             Vezi toate scuterele <ArrowRight className="w-5 h-5" />
           </Button>
         </motion.div>

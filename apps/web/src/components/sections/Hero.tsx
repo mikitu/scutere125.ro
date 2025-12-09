@@ -102,7 +102,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <Button variant="primary" size="lg" href="/scutere">
+            <Button variant="primary" size="lg" href="/scutere-125">
               Vezi scuterele <ArrowRight className="w-5 h-5" />
             </Button>
             <Button variant="outline" size="lg" href="/contact">
