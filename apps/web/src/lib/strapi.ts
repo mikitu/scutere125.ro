@@ -105,17 +105,20 @@ export async function getScooterBySlug(slug: string): Promise<StrapiScooter | nu
 
 export function getStrapiMediaUrl(media: StrapiMedia): string {
   if (!media?.data) return '';
-  
+
   const imageData = Array.isArray(media.data) ? media.data[0] : media.data;
   if (!imageData) return '';
-  
+
   const url = imageData.url;
-  
+
+  // Check if url exists
+  if (!url) return '';
+
   // If URL is already absolute, return it
   if (url.startsWith('http')) {
     return url;
   }
-  
+
   // Otherwise, prepend Strapi URL
   return `${STRAPI_URL}${url}`;
 }
