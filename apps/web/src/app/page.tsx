@@ -4,14 +4,17 @@ import { Hero } from '@/components/sections/Hero';
 import { ScooterShowcase } from '@/components/sections/ScooterShowcase';
 import { WhyChooseUs } from '@/components/sections/WhyChooseUs';
 import { CTASection } from '@/components/sections/CTASection';
+import { fetchScooters } from '@/data/scooters';
 
-export default function Home() {
+export default async function Home() {
+  const scooters = await fetchScooters();
+
   return (
     <>
       <Header />
       <main>
         <Hero />
-        <ScooterShowcase />
+        <ScooterShowcase scooters={scooters} />
         <WhyChooseUs />
         <CTASection />
       </main>

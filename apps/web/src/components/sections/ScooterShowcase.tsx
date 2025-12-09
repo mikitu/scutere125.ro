@@ -5,13 +5,17 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Fuel, Gauge, Weight } from 'lucide-react';
-import { scooters } from '@/data/scooters';
+import { Scooter } from '@/data/scooters';
 import { formatPrice } from '@/lib/utils';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
-export function ScooterShowcase() {
+interface ScooterShowcaseProps {
+  scooters: Scooter[];
+}
+
+export function ScooterShowcase({ scooters }: ScooterShowcaseProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 

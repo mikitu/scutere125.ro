@@ -4,13 +4,17 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Fuel, Gauge, Weight, Check } from 'lucide-react';
-import { scooters } from '@/data/scooters';
+import { Scooter } from '@/data/scooters';
 import { formatPrice } from '@/lib/utils';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
-export function ScooterCatalog() {
+interface ScooterCatalogProps {
+  scooters: Scooter[];
+}
+
+export function ScooterCatalog({ scooters }: ScooterCatalogProps) {
   return (
     <section className="py-16 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

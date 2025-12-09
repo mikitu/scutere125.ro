@@ -129,3 +129,30 @@ export const getScooterBySlug = (slug: string): Scooter | undefined => {
   return scooters.find((s) => s.slug === slug);
 };
 
+// Funcții pentru a prelua date din Strapi
+import { getScooters as getStrapiScooters, getScooterBySlug as getStrapiScooterBySlug } from '@/lib/strapi';
+import { adaptStrapiScooters, adaptStrapiScooter } from '@/lib/scooter-adapter';
+
+export async function fetchScooters(): Promise<Scooter[]> {
+  try {
+    const strapiScooters = await getStrapiScooters();
+    return adaptStrapiScooters(strapiScooters);
+  } catch (error) {
+    console.error('Error fetching scooters from Strapi:', error);
+    // Fallback la datele statice
+    return scooters;
+  }
+}
+
+export async function fetchScooterBySlug(slug: string): Promise<Scooter | null> {
+  try {
+    const strapiScooter = await getStrapiScooterBySlug(slug);
+    if (!strapiScooter) return null;
+    return adaptStrapiScooter(strapiScooter);
+  } catch (error) {
+    console.error('Error fetching scooter from Strapi:', error);
+    // Fallback la datele statice
+    return getScooterBySlug(slug) || null;
+  }
+}
+

@@ -1,0 +1,95 @@
+{
+  "kind": "collectionType",
+  "collectionName": "scooters",
+  "info": {
+    "singularName": "scooter",
+    "pluralName": "scooters",
+    "displayName": "Scooter",
+    "description": "Scutere 125cc pentru B125"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "tagline": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "priceMax": {
+      "type": "decimal"
+    },
+    "listingImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "engine": {
+      "type": "string",
+      "required": true
+    },
+    "power": {
+      "type": "string",
+      "required": true
+    },
+    "consumption": {
+      "type": "string",
+      "required": true
+    },
+    "weight": {
+      "type": "string",
+      "required": true
+    },
+    "seatHeight": {
+      "type": "string",
+      "required": true
+    },
+    "storage": {
+      "type": "string",
+      "required": true
+    },
+    "features": {
+      "type": "json",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["urban", "sport", "premium"],
+      "required": true
+    },
+    "badge": {
+      "type": "string"
+    }
+  }
+}
+

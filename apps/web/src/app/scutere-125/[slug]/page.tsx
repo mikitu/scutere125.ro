@@ -3,13 +3,14 @@ import { notFound } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ScooterDetail } from '@/components/sections/ScooterDetail';
-import { scooters, getScooterBySlug } from '@/data/scooters';
+import { fetchScooters, fetchScooterBySlug } from '@/data/scooters';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
+  const scooters = await fetchScooters();
   return scooters.map((scooter) => ({
     slug: scooter.slug,
   }));
@@ -17,8 +18,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const scooter = getScooterBySlug(slug);
-  
+  const scooter = await fetchScooterBySlug(slug);
+
   if (!scooter) {
     return {
       title: 'Scuter negăsit | Scutere125.ro',
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ScooterPage({ params }: PageProps) {
   const { slug } = await params;
-  const scooter = getScooterBySlug(slug);
+  const scooter = await fetchScooterBySlug(slug);
 
   if (!scooter) {
     notFound();
