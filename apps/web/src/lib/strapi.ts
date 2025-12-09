@@ -3,10 +3,16 @@ const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 interface StrapiImage {
   id: number;
-  url: string;
-  alternativeText?: string;
-  width?: number;
-  height?: number;
+  attributes: {
+    url: string;
+    alternativeText?: string;
+    width?: number;
+    height?: number;
+    name?: string;
+    ext?: string;
+    mime?: string;
+    size?: number;
+  };
 }
 
 interface StrapiMedia {
@@ -85,10 +91,10 @@ export async function getScooters(): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
     '/scooters?populate=*',
     {
-      next: { revalidate: 60 }, // Revalidate every 60 seconds
+      cache: 'no-store', // Disable cache during development
     }
   );
-  
+
   return response.data;
 }
 
@@ -96,10 +102,10 @@ export async function getScooterBySlug(slug: string): Promise<StrapiScooter | nu
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
     `/scooters?filters[slug][$eq]=${slug}&populate=*`,
     {
-      next: { revalidate: 60 },
+      cache: 'no-store', // Disable cache during development
     }
   );
-  
+
   return response.data[0] || null;
 }
 
@@ -109,9 +115,7 @@ export function getStrapiMediaUrl(media: StrapiMedia): string {
   const imageData = Array.isArray(media.data) ? media.data[0] : media.data;
   if (!imageData) return '';
 
-  const url = imageData.url;
-
-  // Check if url exists
+  const url = imageData.attributes.url;
   if (!url) return '';
 
   // If URL is already absolute, return it
@@ -125,11 +129,11 @@ export function getStrapiMediaUrl(media: StrapiMedia): string {
 
 export function getStrapiMediaUrls(media: StrapiMedia): string[] {
   if (!media?.data) return [];
-  
+
   const images = Array.isArray(media.data) ? media.data : [media.data];
-  
+
   return images.map(img => {
-    const url = img.url;
+    const url = img.attributes.url;
     return url.startsWith('http') ? url : `${STRAPI_URL}${url}`;
   });
 }

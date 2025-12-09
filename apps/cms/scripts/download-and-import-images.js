@@ -28,52 +28,52 @@ const scooterImages = {
     ]
   },
   'yamaha-nmax-125': {
-    main: 'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/nmax-125/2024/colour/nmax-125-2024-colour-midnight-black.png',
+    main: 'https://cdn.yamaha-motor.eu/product_assets/2024/NMAX125/950-75/2024-Yamaha-NMAX125-EU-Midnight_Black-Studio-001-03.jpg',
     gallery: [
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/nmax-125/2024/gallery/nmax-125-2024-gallery-01.jpg',
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/nmax-125/2024/gallery/nmax-125-2024-gallery-02.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/NMAX125/950-75/2024-Yamaha-NMAX125-EU-Midnight_Black-Studio-002-03.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/NMAX125/950-75/2024-Yamaha-NMAX125-EU-Midnight_Black-Studio-003-03.jpg',
     ]
   },
   'yamaha-nmax-125-tech-max': {
-    main: 'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/nmax-125-tech-max/2024/colour/nmax-125-tech-max-2024-colour-tech-kamo.png',
+    main: 'https://cdn.yamaha-motor.eu/product_assets/2024/NMAX125TM/950-75/2024-Yamaha-NMAX125TM-EU-Tech_Kamo-Studio-001-03.jpg',
     gallery: [
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/nmax-125-tech-max/2024/gallery/nmax-125-tech-max-2024-gallery-01.jpg',
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/nmax-125-tech-max/2024/gallery/nmax-125-tech-max-2024-gallery-02.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/NMAX125TM/950-75/2024-Yamaha-NMAX125TM-EU-Tech_Kamo-Studio-002-03.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/NMAX125TM/950-75/2024-Yamaha-NMAX125TM-EU-Tech_Kamo-Studio-003-03.jpg',
     ]
   },
   'yamaha-xmax-125-2026': {
-    main: 'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/xmax-125-2026/2026/colour/xmax-125-2026-colour-icon-grey.png',
+    main: 'https://cdn.yamaha-motor.eu/product_assets/2026/XM125A/950-75/2026-Yamaha-XM125A-EU-Icon_Grey-Studio-001-03.jpg',
     gallery: [
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/xmax-125-2026/2026/gallery/xmax-125-2026-gallery-01.jpg',
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/xmax-125-2026/2026/gallery/xmax-125-2026-gallery-02.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2026/XM125A/950-75/2026-Yamaha-XM125A-EU-Icon_Grey-Studio-002-03.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2026/XM125A/950-75/2026-Yamaha-XM125A-EU-Icon_Grey-Studio-003-03.jpg',
     ]
   },
   'yamaha-xmax-125-tech-max': {
-    main: 'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/xmax-125-tech-max/2024/colour/xmax-125-tech-max-2024-colour-tech-kamo.png',
+    main: 'https://cdn.yamaha-motor.eu/product_assets/2024/XM125ATM/950-75/2024-Yamaha-XM125ATM-EU-Tech_Kamo-Studio-001-03.jpg',
     gallery: [
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/xmax-125-tech-max/2024/gallery/xmax-125-tech-max-2024-gallery-01.jpg',
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/sport/xmax-125-tech-max/2024/gallery/xmax-125-tech-max-2024-gallery-02.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/XM125ATM/950-75/2024-Yamaha-XM125ATM-EU-Tech_Kamo-Studio-002-03.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/XM125ATM/950-75/2024-Yamaha-XM125ATM-EU-Tech_Kamo-Studio-003-03.jpg',
     ]
   },
   'yamaha-tricity-125': {
-    main: 'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/tricity-125/2024/colour/tricity-125-2024-colour-power-black.png',
+    main: 'https://cdn.yamaha-motor.eu/product_assets/2024/MWC125A/950-75/2024-Yamaha-MWC125A-EU-Power_Black-Studio-001-03.jpg',
     gallery: [
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/tricity-125/2024/gallery/tricity-125-2024-gallery-01.jpg',
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/tricity-125/2024/gallery/tricity-125-2024-gallery-02.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/MWC125A/950-75/2024-Yamaha-MWC125A-EU-Power_Black-Studio-002-03.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/MWC125A/950-75/2024-Yamaha-MWC125A-EU-Power_Black-Studio-003-03.jpg',
     ]
   },
   'yamaha-rayzr': {
-    main: 'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/rayzr/2024/colour/rayzr-2024-colour-racing-blue.png',
+    main: 'https://cdn.yamaha-motor.eu/product_assets/2024/RAYZR/950-75/2024-Yamaha-RAYZR-EU-Racing_Blue-Studio-001-03.jpg',
     gallery: [
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/rayzr/2024/gallery/rayzr-2024-gallery-01.jpg',
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/rayzr/2024/gallery/rayzr-2024-gallery-02.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/RAYZR/950-75/2024-Yamaha-RAYZR-EU-Racing_Blue-Studio-002-03.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/RAYZR/950-75/2024-Yamaha-RAYZR-EU-Racing_Blue-Studio-003-03.jpg',
     ]
   },
   'yamaha-delight-125': {
-    main: 'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/d-elight/2024/colour/d-elight-2024-colour-milky-white.png',
+    main: 'https://cdn.yamaha-motor.eu/product_assets/2024/DELIGHT/950-75/2024-Yamaha-DELIGHT-EU-Milky_White-Studio-001-03.jpg',
     gallery: [
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/d-elight/2024/gallery/d-elight-2024-gallery-01.jpg',
-      'https://www.yamaha-motor.eu/content/dam/yamaha-motor/yme/b2c/ro/scooters/urban-mobility/d-elight/2024/gallery/d-elight-2024-gallery-02.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/DELIGHT/950-75/2024-Yamaha-DELIGHT-EU-Milky_White-Studio-002-03.jpg',
+      'https://cdn.yamaha-motor.eu/product_assets/2024/DELIGHT/950-75/2024-Yamaha-DELIGHT-EU-Milky_White-Studio-003-03.jpg',
     ]
   },
 };
@@ -96,8 +96,14 @@ function downloadImage(url, dest) {
 
     const protocol = url.startsWith('https') ? https : http;
     const file = fs.createWriteStream(dest);
-    
-    protocol.get(url, (response) => {
+
+    const options = {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    };
+
+    protocol.get(url, options, (response) => {
       if (response.statusCode === 200) {
         response.pipe(file);
         file.on('finish', () => {
