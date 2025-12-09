@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
 import { ArrowRight, Shield, Fuel, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
@@ -24,37 +25,41 @@ export function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden animated-gradient"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero-1.jpg"
+          alt="Scuter Honda pe drum"
+          fill
+          className="object-cover"
+          priority
+          quality={90}
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background" />
+      </div>
+
+      {/* Animated accent elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{ duration: 8, repeat: Infinity, delay: 2 }}
         />
       </div>
-
-      {/* Grid pattern overlay */}
-      <div 
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                           linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }}
-      />
 
       <motion.div style={{ y, opacity }} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
