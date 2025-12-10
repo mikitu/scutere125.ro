@@ -8,7 +8,8 @@
     "dev": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "postinstall": "npm rebuild sharp || true"
   },
   "dependencies": {
     "@strapi/plugin-i18n": "4.25.23",
@@ -19,6 +20,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^5.3.4",
+    "sharp": "^0.33.5",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
