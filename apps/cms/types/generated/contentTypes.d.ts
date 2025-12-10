@@ -437,12 +437,14 @@ export interface ApiScooterScooter extends Schema.CollectionType {
     gallery: Attribute.Media<'images', true>;
     image: Attribute.Media<'images'> & Attribute.Required;
     listingImage: Attribute.Media<'images'> & Attribute.Required;
+    mainImage: Attribute.Media<'images'>;
     name: Attribute.String & Attribute.Required;
     power: Attribute.String & Attribute.Required;
     price: Attribute.Decimal & Attribute.Required;
     priceMax: Attribute.Decimal;
     publishedAt: Attribute.DateTime;
     seatHeight: Attribute.String & Attribute.Required;
+    showOnHomepage: Attribute.Boolean & Attribute.DefaultTo<false>;
     slug: Attribute.UID<'api::scooter.scooter', 'name'> & Attribute.Required;
     storage: Attribute.String & Attribute.Required;
     tagline: Attribute.String & Attribute.Required;

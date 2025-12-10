@@ -42,6 +42,12 @@
       "required": true,
       "allowedTypes": ["images"]
     },
+    "mainImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
     "image": {
       "type": "media",
       "multiple": false,
@@ -89,6 +95,10 @@
     },
     "badge": {
       "type": "string"
+    },
+    "showOnHomepage": {
+      "type": "boolean",
+      "default": false
     },
     "colors": {
       "type": "relation",

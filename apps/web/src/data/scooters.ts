@@ -141,7 +141,7 @@ export const getScooterBySlug = (slug: string): Scooter | undefined => {
 };
 
 // Funcții pentru a prelua date din Strapi
-import { getScooters as getStrapiScooters, getScooterBySlug as getStrapiScooterBySlug } from '@/lib/strapi';
+import { getScooters as getStrapiScooters, getHomepageScooters as getStrapiHomepageScooters, getScooterBySlug as getStrapiScooterBySlug } from '@/lib/strapi';
 import { adaptStrapiScooters, adaptStrapiScooter } from '@/lib/scooter-adapter';
 
 export async function fetchScooters(): Promise<Scooter[]> {
@@ -152,6 +152,17 @@ export async function fetchScooters(): Promise<Scooter[]> {
     console.error('Error fetching scooters from Strapi:', error);
     // Fallback la datele statice
     return scooters;
+  }
+}
+
+export async function fetchHomepageScooters(): Promise<Scooter[]> {
+  try {
+    const strapiScooters = await getStrapiHomepageScooters();
+    return adaptStrapiScooters(strapiScooters);
+  } catch (error) {
+    console.error('Error fetching homepage scooters from Strapi:', error);
+    // Fallback la primele 3 scutere statice
+    return scooters.slice(0, 3);
   }
 }
 

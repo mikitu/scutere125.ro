@@ -23,7 +23,7 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
   const { attributes } = strapiScooter;
 
   const listingImage = getStrapiMediaUrl(attributes.listingImage) || PLACEHOLDER_IMAGE;
-  const mainImage = getStrapiMediaUrl(attributes.image) || PLACEHOLDER_IMAGE;
+  const mainImage = getStrapiMediaUrl(attributes.mainImage) || getStrapiMediaUrl(attributes.image) || PLACEHOLDER_IMAGE;
   const gallery = getStrapiMediaUrls(attributes.gallery);
 
   // Adapt colors if they exist

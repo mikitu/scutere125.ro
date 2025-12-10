@@ -44,6 +44,7 @@ export interface StrapiScooter {
     price: number;
     priceMax?: number;
     listingImage: StrapiMedia;
+    mainImage: StrapiMedia;
     image: StrapiMedia;
     gallery: StrapiMedia;
     engine: string;
@@ -55,6 +56,7 @@ export interface StrapiScooter {
     features: string[];
     category: 'urban' | 'sport' | 'premium';
     badge?: string;
+    showOnHomepage?: boolean;
     colors?: {
       data: StrapiScooterColor[];
     };
@@ -107,7 +109,18 @@ async function fetchAPI<T>(
 
 export async function getScooters(): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    '/scooters?populate[listingImage]=*&populate[image]=*&populate[gallery]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*',
+    '/scooters?populate[listingImage]=*&populate[mainImage]=*&populate[image]=*&populate[gallery]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*',
+    {
+      cache: 'no-store', // Disable cache during development
+    }
+  );
+
+  return response.data;
+}
+
+export async function getHomepageScooters(): Promise<StrapiScooter[]> {
+  const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
+    '/scooters?filters[showOnHomepage][$eq]=true&populate[listingImage]=*&populate[mainImage]=*&populate[image]=*&populate[gallery]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*',
     {
       cache: 'no-store', // Disable cache during development
     }
@@ -118,7 +131,7 @@ export async function getScooters(): Promise<StrapiScooter[]> {
 
 export async function getScooterBySlug(slug: string): Promise<StrapiScooter | null> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    `/scooters?filters[slug][$eq]=${slug}&populate[listingImage]=*&populate[image]=*&populate[gallery]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*`,
+    `/scooters?filters[slug][$eq]=${slug}&populate[listingImage]=*&populate[mainImage]=*&populate[image]=*&populate[gallery]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*`,
     {
       cache: 'no-store', // Disable cache during development
     }
