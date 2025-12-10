@@ -1,14 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowLeft, Phone, MessageCircle, Check, Fuel, Gauge, Weight, Armchair, Package, Settings } from 'lucide-react';
-import { Scooter } from '@/data/scooters';
+import { Scooter, ScooterColor } from '@/data/scooters';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
 import { ImageGallery } from '@/components/ui/ImageGallery';
+import { ColorSelector } from '@/components/ui/ColorSelector';
 
 interface ScooterDetailProps {
   scooter: Scooter;
@@ -33,6 +35,17 @@ const specLabels: Record<string, string> = {
 };
 
 export function ScooterDetail({ scooter }: ScooterDetailProps) {
+  const [selectedColor, setSelectedColor] = useState<ScooterColor | null>(
+    scooter.colors && scooter.colors.length > 0 ? scooter.colors[0] : null
+  );
+
+  // Use color-specific images if a color is selected, otherwise use default scooter images
+  const displayImages = selectedColor?.gallery && selectedColor.gallery.length > 0
+    ? selectedColor.gallery
+    : scooter.gallery;
+
+  const displayMainImage = selectedColor?.image || scooter.image;
+
   return (
     <section className="py-8 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,9 +78,9 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
               </div>
             )}
             <ImageGallery
-              images={scooter.gallery}
-              mainImage={scooter.image}
-              alt={scooter.name}
+              images={displayImages}
+              mainImage={displayMainImage}
+              alt={selectedColor ? `${scooter.name} - ${selectedColor.name}` : scooter.name}
             />
           </motion.div>
 
@@ -103,6 +116,16 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
               </p>
             </div>
 
+            {/* Color selector */}
+            {scooter.colors && scooter.colors.length > 0 && (
+              <div className="mb-8">
+                <ColorSelector
+                  colors={scooter.colors}
+                  onColorChange={setSelectedColor}
+                />
+              </div>
+            )}
+
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Button variant="primary" size="lg" className="flex-1">
@@ -119,7 +142,7 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
             <div className="grid grid-cols-2 gap-3 mb-8">
               {scooter.features.map((feature) => (
                 <div key={feature} className="flex items-center gap-2 text-white/80">
-                  <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                  <Check className="w-4 h-4 text-primary shrink-0" />
                   <span className="text-sm">{feature}</span>
                 </div>
               ))}

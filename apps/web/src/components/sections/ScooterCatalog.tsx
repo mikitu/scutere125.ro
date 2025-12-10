@@ -9,6 +9,7 @@ import { formatPrice } from '@/lib/utils';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { ColorIndicator } from '@/components/ui/ColorIndicator';
 
 interface ScooterCatalogProps {
   scooters: Scooter[];
@@ -114,7 +115,7 @@ export function ScooterCatalog({ scooters }: ScooterCatalogProps) {
                     </div>
 
                     {/* Features */}
-                    <div className="flex flex-wrap gap-2 mb-8">
+                    <div className="flex flex-wrap gap-2 mb-6">
                       {scooter.features.slice(0, 4).map((feature) => (
                         <span key={feature} className="inline-flex items-center gap-1 text-sm text-white/60">
                           <Check className="w-4 h-4 text-primary" />
@@ -122,6 +123,13 @@ export function ScooterCatalog({ scooters }: ScooterCatalogProps) {
                         </span>
                       ))}
                     </div>
+
+                    {/* Color indicator */}
+                    {scooter.colors && scooter.colors.length > 0 && (
+                      <div className="mb-6">
+                        <ColorIndicator colors={scooter.colors} maxDisplay={4} />
+                      </div>
+                    )}
 
                     {/* Price and CTA */}
                     <div className="flex items-center justify-between">
