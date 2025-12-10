@@ -65,17 +65,6 @@ export function ColorSelector({ colors, onColorChange, className = '' }: ColorSe
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5" />
                 )}
-                
-                {/* Selected indicator */}
-                {isSelected && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute inset-0 flex items-center justify-center bg-primary/20"
-                  >
-                    <div className="w-3 h-3 rounded-full bg-primary border-2 border-white" />
-                  </motion.div>
-                )}
               </div>
               
               {/* Color name */}
