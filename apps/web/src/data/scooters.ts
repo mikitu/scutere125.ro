@@ -1,3 +1,12 @@
+export interface ScooterColor {
+  name: string;
+  code: string;
+  hex?: string;
+  listingImage?: string;
+  image?: string;
+  gallery?: string[];
+}
+
 export interface Scooter {
   id: string;
   name: string;
@@ -20,6 +29,7 @@ export interface Scooter {
   features: string[];
   category: 'urban' | 'sport' | 'premium';
   badge?: string;
+  colors?: ScooterColor[];
 }
 
 export const scooters: Scooter[] = [

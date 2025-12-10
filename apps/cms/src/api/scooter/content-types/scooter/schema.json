@@ -89,6 +89,10 @@
     },
     "badge": {
       "type": "string"
+    },
+    "colors": {
+      "type": "json",
+      "required": false
     }
   }
 }

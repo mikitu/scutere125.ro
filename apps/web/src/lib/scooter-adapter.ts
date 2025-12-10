@@ -34,6 +34,7 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
     features: attributes.features,
     category: attributes.category,
     badge: attributes.badge,
+    colors: attributes.colors || undefined,
   };
 }
 

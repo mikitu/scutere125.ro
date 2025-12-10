@@ -40,6 +40,7 @@ export interface StrapiScooter {
     features: string[];
     category: 'urban' | 'sport' | 'premium';
     badge?: string;
+    colors?: any; // JSON field for color variants
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
