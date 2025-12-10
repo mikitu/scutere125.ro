@@ -11,22 +11,31 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Load Render credentials from .env.render file
+if [ -f ".env.render" ]; then
+  export $(cat .env.render | grep -v '^#' | xargs)
+else
+  echo -e "${RED}❌ Error: .env.render file not found!${NC}"
+  echo -e "${YELLOW}Please create .env.render with Render database credentials.${NC}"
+  exit 1
+fi
+
 # Local database settings
 LOCAL_DB="scutere125"
 LOCAL_USER="mihaibucse"
 LOCAL_HOST="localhost"
 LOCAL_PORT="5432"
 
-# Render database settings
-RENDER_DB="scutere125_ro"
-RENDER_USER="scutere125_ro_user"
-RENDER_PASSWORD="5JDLvWYE4YtvHh7UiZBvxujqWMrPnPGL"
-RENDER_HOST="dpg-d4s1jq4gq5a738021dg-a.frankfurt-postgres.render.com"
-RENDER_PORT="5432"
-RENDER_URL="postgresql://scutere125_ro_user:5JDLvWYE4YtvHh7UiZBvxujqWMrPnPGL@dpg-d4s1jq4gq5a738021dg-a.frankfurt-postgres.render.com/scutere125_ro?sslmode=require"
+# Render database settings (loaded from .env.render)
+RENDER_DB="${RENDER_DB_NAME}"
+RENDER_USER="${RENDER_DB_USER}"
+RENDER_PASSWORD="${RENDER_DB_PASSWORD}"
+RENDER_HOST="${RENDER_DB_HOST}"
+RENDER_PORT="${RENDER_DB_PORT}"
+RENDER_URL="${RENDER_DATABASE_URL}?sslmode=require"
 
-# Temporary dump file
-DUMP_FILE="./tmp/scutere125_dump_$(date +%Y%m%d_%H%M%S).sql"
+# Temporary dump file (custom format for pg_restore)
+DUMP_FILE="./tmp/scutere125_dump_$(date +%Y%m%d_%H%M%S).dump"
 
 # Create tmp directory if it doesn't exist
 mkdir -p ./tmp
@@ -36,6 +45,7 @@ echo -e "${YELLOW}🚀 Starting database sync from local to Render...${NC}\n"
 # Step 1: Export local database
 echo -e "${YELLOW}📦 Step 1: Exporting local database...${NC}"
 pg_dump -U $LOCAL_USER -h $LOCAL_HOST -p $LOCAL_PORT -d $LOCAL_DB \
+  --format=custom \
   --clean \
   --if-exists \
   --no-owner \
@@ -53,7 +63,7 @@ fi
 echo -e "${YELLOW}📤 Step 2: Importing to Render database...${NC}"
 echo -e "${YELLOW}   This may take a few minutes...${NC}\n"
 
-psql "$RENDER_URL" -f $DUMP_FILE
+pg_restore --verbose --clean --no-acl --no-owner -d "$RENDER_URL" $DUMP_FILE
 
 if [ $? -eq 0 ]; then
   echo -e "\n${GREEN}✅ Database imported successfully to Render!${NC}\n"

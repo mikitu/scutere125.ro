@@ -51,3 +51,4 @@ apps/cms/export
 .netlify
 
 tmp/
+.env.render
