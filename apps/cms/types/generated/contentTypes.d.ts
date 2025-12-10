@@ -374,8 +374,7 @@ export interface ApiScooterColorScooterColor extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    code: Attribute.UID<'api::scooter-color.scooter-color', 'name'> &
-      Attribute.Required;
+    code: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::scooter-color.scooter-color',

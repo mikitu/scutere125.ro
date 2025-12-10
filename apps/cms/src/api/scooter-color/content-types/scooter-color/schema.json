@@ -17,8 +17,7 @@
       "required": true
     },
     "code": {
-      "type": "uid",
-      "targetField": "name",
+      "type": "string",
       "required": true
     },
     "hex": {
