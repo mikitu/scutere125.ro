@@ -74,12 +74,12 @@ async function organizeImagesInFolders() {
 
       if (targetFolder && folders[targetFolder]) {
         const folder = folders[targetFolder];
-        const newPath = `${folder.path}/${image.name}`;
-        
+        const newPath = folder.path; // Just the folder path, not including filename
+
         console.log(`📦 Moving: ${image.name}`);
         console.log(`   → To folder: ${targetFolder} (${newPath})`);
 
-        // Update file folder_path
+        // Update file folder_path (just the folder, not the full file path)
         await client.query(
           'UPDATE files SET folder_path = $1 WHERE id = $2',
           [newPath, image.id]

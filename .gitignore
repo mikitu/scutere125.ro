@@ -50,3 +50,4 @@ apps/cms/export
 .vercel
 .netlify
 
+tmp/
