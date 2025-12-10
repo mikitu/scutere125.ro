@@ -89,6 +89,12 @@
     },
     "badge": {
       "type": "string"
+    },
+    "colors": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::scooter-color.scooter-color",
+      "mappedBy": "scooter"
     }
   }
 }

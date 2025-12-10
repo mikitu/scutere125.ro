@@ -19,6 +19,21 @@ interface StrapiMedia {
   data: StrapiImage | StrapiImage[] | null;
 }
 
+export interface StrapiScooterColor {
+  id: number;
+  attributes: {
+    name: string;
+    code: string;
+    hex?: string;
+    listingImage: StrapiMedia;
+    image: StrapiMedia;
+    gallery: StrapiMedia;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+}
+
 export interface StrapiScooter {
   id: number;
   attributes: {
@@ -40,7 +55,9 @@ export interface StrapiScooter {
     features: string[];
     category: 'urban' | 'sport' | 'premium';
     badge?: string;
-    colors?: any; // JSON field for color variants
+    colors?: {
+      data: StrapiScooterColor[];
+    };
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
@@ -90,7 +107,7 @@ async function fetchAPI<T>(
 
 export async function getScooters(): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    '/scooters?populate=*',
+    '/scooters?populate[listingImage]=*&populate[image]=*&populate[gallery]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*',
     {
       cache: 'no-store', // Disable cache during development
     }
@@ -101,7 +118,7 @@ export async function getScooters(): Promise<StrapiScooter[]> {
 
 export async function getScooterBySlug(slug: string): Promise<StrapiScooter | null> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    `/scooters?filters[slug][$eq]=${slug}&populate=*`,
+    `/scooters?filters[slug][$eq]=${slug}&populate[listingImage]=*&populate[image]=*&populate[gallery]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*`,
     {
       cache: 'no-store', // Disable cache during development
     }

@@ -1,9 +1,23 @@
-import type { Scooter } from '@/data/scooters';
-import type { StrapiScooter } from './strapi';
+import type { Scooter, ScooterColor } from '@/data/scooters';
+import type { StrapiScooter, StrapiScooterColor } from './strapi';
 import { getStrapiMediaUrl, getStrapiMediaUrls } from './strapi';
 
 // Placeholder image pentru scutere fără imagini
 const PLACEHOLDER_IMAGE = '/images/placeholder-scooter.jpg';
+
+function adaptStrapiScooterColor(strapiColor: StrapiScooterColor): ScooterColor {
+  const { attributes } = strapiColor;
+
+  return {
+    id: strapiColor.id,
+    name: attributes.name,
+    code: attributes.code,
+    hex: attributes.hex,
+    listingImage: getStrapiMediaUrl(attributes.listingImage) || undefined,
+    image: getStrapiMediaUrl(attributes.image) || undefined,
+    gallery: getStrapiMediaUrls(attributes.gallery),
+  };
+}
 
 export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
   const { attributes } = strapiScooter;
@@ -11,6 +25,11 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
   const listingImage = getStrapiMediaUrl(attributes.listingImage) || PLACEHOLDER_IMAGE;
   const mainImage = getStrapiMediaUrl(attributes.image) || PLACEHOLDER_IMAGE;
   const gallery = getStrapiMediaUrls(attributes.gallery);
+
+  // Adapt colors if they exist
+  const colors = attributes.colors?.data?.length
+    ? attributes.colors.data.map(adaptStrapiScooterColor)
+    : undefined;
 
   return {
     id: attributes.slug,
@@ -34,7 +53,7 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
     features: attributes.features,
     category: attributes.category,
     badge: attributes.badge,
-    colors: attributes.colors || undefined,
+    colors,
   };
 }
 

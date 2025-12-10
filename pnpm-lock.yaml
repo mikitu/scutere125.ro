@@ -19,6 +19,9 @@ importers:
       '@strapi/strapi':
         specifier: 4.25.23
         version: 4.25.23(@babel/runtime@7.28.4)(@codemirror/autocomplete@6.20.0)(@codemirror/language@6.11.3)(@codemirror/lint@6.9.2)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.39.1)(@types/hoist-non-react-statics@3.3.7(@types/react@18.3.27))(@types/node@22.19.2)(@types/react@18.3.27)(codemirror@5.65.20)(lightningcss@1.30.2)(pg@8.16.3)(react-dom@18.3.1(react@18.3.1))(react-router-dom@5.3.4(react@18.3.1))(react@18.3.1)(redux@4.2.1)(styled-components@5.3.11(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(terser@5.44.1)(type-fest@2.19.0)
+      form-data:
+        specifier: ^4.0.5
+        version: 4.0.5
       pg:
         specifier: ^8.13.1
         version: 8.16.3

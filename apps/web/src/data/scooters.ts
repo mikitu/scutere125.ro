@@ -1,10 +1,11 @@
 export interface ScooterColor {
+  id: number;
   name: string;
   code: string;
   hex?: string;
-  listingImage?: string;
-  image?: string;
-  gallery?: string[];
+  listingImage?: string;  // URL resolved from Strapi
+  image?: string;         // URL resolved from Strapi
+  gallery?: string[];     // URLs resolved from Strapi
 }
 
 export interface Scooter {

@@ -11,9 +11,10 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/strapi": "4.25.23",
-    "@strapi/plugin-users-permissions": "4.25.23",
     "@strapi/plugin-i18n": "4.25.23",
+    "@strapi/plugin-users-permissions": "4.25.23",
+    "@strapi/strapi": "4.25.23",
+    "form-data": "^4.0.5",
     "pg": "^8.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -36,4 +37,3 @@
   },
   "license": "UNLICENSED"
 }
-

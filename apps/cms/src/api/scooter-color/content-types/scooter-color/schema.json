@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "scooter_colors",
+  "info": {
+    "singularName": "scooter-color",
+    "pluralName": "scooter-colors",
+    "displayName": "Scooter Color",
+    "description": "Color variants for scooters"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "code": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "hex": {
+      "type": "string",
+      "required": false
+    },
+    "listingImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "scooter": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::scooter.scooter",
+      "inversedBy": "colors"
+    }
+  }
+}
+

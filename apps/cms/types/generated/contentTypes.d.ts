@@ -362,6 +362,48 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiScooterColorScooterColor extends Schema.CollectionType {
+  collectionName: 'scooter_colors';
+  info: {
+    description: 'Color variants for scooters';
+    displayName: 'Scooter Color';
+    pluralName: 'scooter-colors';
+    singularName: 'scooter-color';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    code: Attribute.UID<'api::scooter-color.scooter-color', 'name'> &
+      Attribute.Required;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::scooter-color.scooter-color',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    gallery: Attribute.Media<'images', true>;
+    hex: Attribute.String;
+    image: Attribute.Media<'images'>;
+    listingImage: Attribute.Media<'images'>;
+    name: Attribute.String & Attribute.Required;
+    publishedAt: Attribute.DateTime;
+    scooter: Attribute.Relation<
+      'api::scooter-color.scooter-color',
+      'manyToOne',
+      'api::scooter.scooter'
+    >;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::scooter-color.scooter-color',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiScooterScooter extends Schema.CollectionType {
   collectionName: 'scooters';
   info: {
@@ -377,6 +419,11 @@ export interface ApiScooterScooter extends Schema.CollectionType {
     badge: Attribute.String;
     category: Attribute.Enumeration<['urban', 'sport', 'premium']> &
       Attribute.Required;
+    colors: Attribute.Relation<
+      'api::scooter.scooter',
+      'oneToMany',
+      'api::scooter-color.scooter-color'
+    >;
     consumption: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -847,6 +894,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::scooter-color.scooter-color': ApiScooterColorScooterColor;
       'api::scooter.scooter': ApiScooterScooter;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
