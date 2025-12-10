@@ -377,7 +377,6 @@ export interface ApiScooterScooter extends Schema.CollectionType {
     badge: Attribute.String;
     category: Attribute.Enumeration<['urban', 'sport', 'premium']> &
       Attribute.Required;
-    colors: Attribute.JSON;
     consumption: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
