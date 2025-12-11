@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "@/components/providers/AppProviders";
 import { fetchScootersForQuoteModal } from "@/data/scooters";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <GoogleAnalytics />
         <AppProviders scooters={scooters}>
           {children}
         </AppProviders>
