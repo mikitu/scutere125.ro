@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Resend } from 'resend';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
   try {
@@ -81,11 +83,75 @@ export async function POST(request: NextRequest) {
     }
 
     const savedRequest = await strapiResponse.json();
+    const requestId = savedRequest.data.id;
 
-    // TODO: Send email notification
-    // You can integrate with Resend, SendGrid, or other email service here
-    // For now, we just log it
-    console.log('Quote request saved:', savedRequest.data.id);
+    // Send email notification
+    let emailSent = false;
+    let emailSentAt = null;
+
+    try {
+      await resend.emails.send({
+        from: 'Scutere125.ro <contact@scutere125.ro>',
+        to: ['contact@scutere125.ro'],
+        subject: `🚀 Solicitare Ofertă Nouă de la ${name}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #e63946;">🚀 Solicitare Ofertă Nouă - Scutere125.ro</h2>
+
+            <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin-top: 0; color: #333;">Detalii Client:</h3>
+              <p><strong>Nume:</strong> ${name}</p>
+              <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+              <p><strong>Telefon:</strong> <a href="tel:${phone}">${phone}</a></p>
+              ${scooter ? `<p><strong>Scuter de interes:</strong> <span style="color: #e63946; font-weight: bold;">${scooter}</span></p>` : '<p><em>Nu a selectat un model specific</em></p>'}
+            </div>
+
+            ${message ? `
+            <div style="background-color: #fff; padding: 20px; border-left: 4px solid #e63946; margin: 20px 0;">
+              <h3 style="margin-top: 0; color: #333;">Ce îl interesează:</h3>
+              <p style="white-space: pre-wrap;">${message}</p>
+            </div>
+            ` : ''}
+
+            <div style="background-color: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f4a261;">
+              <p style="margin: 0; color: #856404;">
+                <strong>⚡ Acțiune necesară:</strong> Contactează clientul cât mai curând pentru a-i oferi o ofertă personalizată!
+              </p>
+            </div>
+
+            <div style="color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+              <p><strong>Informații tehnice:</strong></p>
+              <p>IP: ${ipAddress}</p>
+              <p>User Agent: ${userAgent}</p>
+              <p>Data: ${new Date().toLocaleString('ro-RO', { timeZone: 'Europe/Bucharest' })}</p>
+              <p>ID Solicitare: ${requestId}</p>
+            </div>
+          </div>
+        `,
+      });
+
+      emailSent = true;
+      emailSentAt = new Date().toISOString();
+
+      // Update Strapi record with email status
+      await fetch(`${STRAPI_URL}/api/quote-requests/${requestId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: {
+            emailSent: true,
+            emailSentAt,
+          },
+        }),
+      });
+
+      console.log('Quote request saved and email sent:', requestId);
+    } catch (emailError) {
+      console.error('Error sending email:', emailError);
+      // Don't fail the request if email fails, request is already saved
+    }
 
     return NextResponse.json({
       success: true,
