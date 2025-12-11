@@ -1,9 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { Shield, Award, HeartHandshake, Wrench, Users, Target } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { fetchScootersForFooter } from '@/data/scooters';
 
 const values = [
   {
@@ -39,6 +41,12 @@ const values = [
 ];
 
 export default function DespreNoiPage() {
+  const [footerScooters, setFooterScooters] = useState<Array<{ name: string; slug: string }>>([]);
+
+  useEffect(() => {
+    fetchScootersForFooter().then(setFooterScooters);
+  }, []);
+
   return (
     <>
       <Header />
@@ -169,7 +177,7 @@ export default function DespreNoiPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

@@ -1,13 +1,16 @@
 import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { fetchScootersForFooter } from '@/data/scooters';
 
 export const metadata: Metadata = {
   title: 'Politica de Cookies | Scutere125.ro',
   description: 'Informații despre utilizarea cookies pe Scutere125.ro',
 };
 
-export default function CookiesPage() {
+export default async function CookiesPage() {
+  const footerScooters = await fetchScootersForFooter();
+
   return (
     <>
       <Header />
@@ -146,7 +149,7 @@ export default function CookiesPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

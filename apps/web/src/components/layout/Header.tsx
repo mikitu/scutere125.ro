@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { Menu, X, Phone, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
+import { useQuoteModal } from '@/contexts/QuoteModalContext';
 
 const navLinks = [
   { href: '/', label: 'Acasă' },
@@ -17,6 +19,21 @@ const navLinks = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const { openModal } = useQuoteModal();
+
+  const handleRequestQuote = () => {
+    if (pathname === '/contact') {
+      // Already on contact page, just open modal
+      openModal();
+    } else {
+      // Navigate to contact page first, then open modal
+      router.push('/contact');
+      // Small delay to ensure page navigation completes
+      setTimeout(() => openModal(), 100);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,7 +88,7 @@ export function Header() {
                 <Phone className="w-4 h-4" />
                 <span>0752 312 097</span>
               </a>
-              <Button variant="primary" size="sm">
+              <Button variant="primary" size="sm" onClick={handleRequestQuote}>
                 Solicită ofertă
               </Button>
             </div>
@@ -118,7 +135,7 @@ export function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <Button variant="primary" size="lg">
+                <Button variant="primary" size="lg" onClick={handleRequestQuote}>
                   Solicită ofertă
                 </Button>
               </motion.div>

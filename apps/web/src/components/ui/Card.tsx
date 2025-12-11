@@ -23,7 +23,7 @@ export function Card({ children, className, hover = true, glow = false }: CardPr
       whileHover={hover ? { y: -5, scale: 1.02 } : undefined}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
-      {children}
+      {children as any}
     </motion.div>
   );
 }

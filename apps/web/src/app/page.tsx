@@ -4,10 +4,11 @@ import { Hero } from '@/components/sections/Hero';
 import { ScooterShowcase } from '@/components/sections/ScooterShowcase';
 import { WhyChooseUs } from '@/components/sections/WhyChooseUs';
 import { CTASection } from '@/components/sections/CTASection';
-import { fetchHomepageScooters } from '@/data/scooters';
+import { fetchHomepageScooters, fetchScootersForFooter } from '@/data/scooters';
 
 export default async function Home() {
   const scooters = await fetchHomepageScooters();
+  const footerScooters = await fetchScootersForFooter();
 
   return (
     <>
@@ -18,7 +19,7 @@ export default async function Home() {
         <WhyChooseUs />
         <CTASection />
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ScooterCatalog } from '@/components/sections/ScooterCatalog';
-import { fetchScooters } from '@/data/scooters';
+import { fetchScooters, fetchScootersForFooter } from '@/data/scooters';
 
 export const metadata: Metadata = {
   title: 'Catalog Scutere 125cc | Scutere ieftine conform legii B125 | Scutere125.ro',
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 
 export default async function ScuterePage() {
   const scooters = await fetchScooters();
+  const footerScooters = await fetchScootersForFooter();
 
   return (
     <>
@@ -18,7 +19,7 @@ export default async function ScuterePage() {
       <main className="pt-20">
         <ScooterCatalog scooters={scooters} />
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

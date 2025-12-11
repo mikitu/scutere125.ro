@@ -31,7 +31,7 @@ export function Badge({ children, variant = 'primary', className, pulse = false 
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {children}
+      {children as any}
     </motion.span>
   );
 }

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ScooterDetail } from '@/components/sections/ScooterDetail';
-import { fetchScooters, fetchScooterBySlug } from '@/data/scooters';
+import { fetchScooters, fetchScooterBySlug, fetchScootersForFooter } from '@/data/scooters';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ScooterPage({ params }: PageProps) {
   const { slug } = await params;
   const scooter = await fetchScooterBySlug(slug);
+  const footerScooters = await fetchScootersForFooter();
 
   if (!scooter) {
     notFound();
@@ -51,7 +52,7 @@ export default async function ScooterPage({ params }: PageProps) {
       <main className="pt-20">
         <ScooterDetail scooter={scooter} />
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

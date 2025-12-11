@@ -2,8 +2,10 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef, useMemo } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { Phone, MessageCircle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useQuoteModal } from '@/contexts/QuoteModalContext';
 
 // Generate particle positions once to avoid hydration mismatch
 const particles = Array.from({ length: 20 }, (_, i) => ({
@@ -17,11 +19,23 @@ const particles = Array.from({ length: 20 }, (_, i) => ({
 export function CTASection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const router = useRouter();
+  const pathname = usePathname();
+  const { openModal } = useQuoteModal();
+
+  const handleRequestQuote = () => {
+    if (pathname === '/contact') {
+      openModal();
+    } else {
+      router.push('/contact');
+      setTimeout(() => openModal(), 100);
+    }
+  };
 
   return (
     <section ref={ref} className="py-24 relative overflow-hidden">
       {/* Background with animated gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-background to-accent/20" />
+      <div className="absolute inset-0 bg-linear-to-r from-primary/20 via-background to-accent/20" />
       
       {/* Animated particles */}
       <div className="absolute inset-0 overflow-hidden">
@@ -76,13 +90,13 @@ export function CTASection() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="primary" size="lg" href="tel:+40700000000">
+            <Button variant="primary" size="lg" href="tel:+40752312097">
               <Phone className="w-5 h-5" />
               Sună acum
             </Button>
-            <Button variant="outline" size="lg" href="/contact">
+            <Button variant="outline" size="lg" onClick={handleRequestQuote}>
               <MessageCircle className="w-5 h-5" />
-              Trimite mesaj
+              Solicită ofertă
             </Button>
           </div>
 

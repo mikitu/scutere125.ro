@@ -2,13 +2,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { fetchScootersForFooter } from '@/data/scooters';
 
 export const metadata: Metadata = {
   title: 'Politica de Confidențialitate | Scutere125.ro',
   description: 'Politica de confidențialitate și protecția datelor personale pe Scutere125.ro',
 };
 
-export default function ConfidentialitatePage() {
+export default async function ConfidentialitatePage() {
+  const footerScooters = await fetchScootersForFooter();
+
   return (
     <>
       <Header />
@@ -161,7 +164,7 @@ export default function ConfidentialitatePage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

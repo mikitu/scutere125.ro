@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getFaqs } from '@/lib/strapi';
+import { fetchScootersForFooter } from '@/data/scooters';
 
 export const metadata: Metadata = {
   title: 'Întrebări Frecvente | Scutere125.ro',
@@ -20,6 +21,7 @@ const categoryLabels = {
 
 export default async function FaqPage() {
   const faqs = await getFaqs();
+  const footerScooters = await fetchScootersForFooter();
 
   // Group FAQs by category
   const faqsByCategory = faqs.reduce((acc, faq) => {
@@ -98,7 +100,7 @@ export default async function FaqPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

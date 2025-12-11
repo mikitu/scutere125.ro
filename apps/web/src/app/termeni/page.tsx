@@ -1,13 +1,16 @@
 import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { fetchScootersForFooter } from '@/data/scooters';
 
 export const metadata: Metadata = {
   title: 'Termeni și Condiții | Scutere125.ro',
   description: 'Termeni și condiții de utilizare a platformei Scutere125.ro',
 };
 
-export default function TermeniPage() {
+export default async function TermeniPage() {
+  const footerScooters = await fetchScootersForFooter();
+
   return (
     <>
       <Header />
@@ -129,7 +132,7 @@ export default function TermeniPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

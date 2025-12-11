@@ -6,6 +6,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
 import { useQuoteModal } from '@/contexts/QuoteModalContext';
+import { useEffect, useState } from 'react';
+import { fetchScootersForFooter } from '@/data/scooters';
 
 const contactInfo = [
   {
@@ -37,6 +39,11 @@ const schedule = [
 
 export default function ContactPage() {
   const { openModal } = useQuoteModal();
+  const [footerScooters, setFooterScooters] = useState<Array<{ name: string; slug: string }>>([]);
+
+  useEffect(() => {
+    fetchScootersForFooter().then(setFooterScooters);
+  }, []);
 
   return (
     <>
@@ -187,7 +194,7 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

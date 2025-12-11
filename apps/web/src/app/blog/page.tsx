@@ -3,13 +3,16 @@ import Link from 'next/link';
 import { Newspaper, Video, FileText, Award } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { fetchScootersForFooter } from '@/data/scooters';
 
 export const metadata: Metadata = {
   title: 'Blog | Scutere125.ro',
   description: 'Articole, recenzii și ghiduri despre scutere 125cc',
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const footerScooters = await fetchScootersForFooter();
+
   return (
     <>
       <Header />
@@ -141,7 +144,7 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer scooters={footerScooters} />
     </>
   );
 }

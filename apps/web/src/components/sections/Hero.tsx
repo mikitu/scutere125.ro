@@ -2,9 +2,11 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowRight, Shield, Fuel, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useQuoteModal } from '@/contexts/QuoteModalContext';
 
 const features = [
   { icon: Shield, label: 'Conform B125', desc: 'Legal cu permis auto' },
@@ -14,6 +16,10 @@ const features = [
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const { openModal } = useQuoteModal();
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
@@ -21,6 +27,15 @@ export function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const handleRequestQuote = () => {
+    if (pathname === '/contact') {
+      openModal();
+    } else {
+      router.push('/contact');
+      setTimeout(() => openModal(), 100);
+    }
+  };
 
   return (
     <section
@@ -38,7 +53,7 @@ export function Hero() {
           quality={90}
         />
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/50 to-background" />
       </div>
 
       {/* Animated accent elements */}
@@ -110,7 +125,7 @@ export function Hero() {
             <Button variant="primary" size="lg" href="/scutere-125">
               Vezi scuterele <ArrowRight className="w-5 h-5" />
             </Button>
-            <Button variant="outline" size="lg" href="/contact">
+            <Button variant="outline" size="lg" onClick={handleRequestQuote}>
               Solicită ofertă
             </Button>
           </motion.div>

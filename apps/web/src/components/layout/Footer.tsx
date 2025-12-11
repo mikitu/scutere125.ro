@@ -4,12 +4,16 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Phone, Mail, MapPin, Facebook, Instagram, Youtube } from 'lucide-react';
 
+interface FooterScooter {
+  name: string;
+  slug: string;
+}
+
+interface FooterProps {
+  scooters?: FooterScooter[];
+}
+
 const footerLinks = {
-  scutere: [
-    { href: '/scutere-125/sh-mode-125', label: 'Honda SH Mode 125' },
-    { href: '/scutere-125/pcx-125', label: 'Honda PCX 125' },
-    { href: '/scutere-125/forza-125', label: 'Honda Forza 125' },
-  ],
   informatii: [
     { href: '/despre', label: 'Despre noi' },
     { href: '/contact', label: 'Contact' },
@@ -23,9 +27,9 @@ const footerLinks = {
   ],
 };
 
-export function Footer() {
+export function Footer({ scooters = [] }: FooterProps) {
   return (
-    <footer className="bg-gradient-to-b from-background to-black border-t border-white/10">
+    <footer className="bg-linear-to-b from-background to-black border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -57,13 +61,21 @@ export function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Scutere 125cc</h4>
             <ul className="space-y-2">
-              {footerLinks.scutere.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors">
-                    {link.label}
+              {scooters.length > 0 ? (
+                scooters.map((scooter) => (
+                  <li key={scooter.slug}>
+                    <Link href={`/scutere-125/${scooter.slug}`} className="text-white/60 hover:text-white text-sm transition-colors">
+                      {scooter.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <Link href="/scutere-125" className="text-white/60 hover:text-white text-sm transition-colors">
+                    Vezi toate scuterele
                   </Link>
                 </li>
-              ))}
+              )}
             </ul>
           </div>
 

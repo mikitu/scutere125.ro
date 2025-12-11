@@ -195,3 +195,19 @@ export async function fetchScootersForQuoteModal(): Promise<Array<{ id: number; 
     }));
   }
 }
+
+export async function fetchScootersForFooter(): Promise<Array<{ name: string; slug: string }>> {
+  try {
+    const homepageScooters = await fetchHomepageScooters();
+    return homepageScooters.map((scooter) => ({
+      name: scooter.name,
+      slug: scooter.slug,
+    }));
+  } catch (error) {
+    console.error('Error fetching scooters for footer:', error);
+    return scooters.slice(0, 3).map((scooter) => ({
+      name: scooter.name,
+      slug: scooter.slug,
+    }));
+  }
+}
