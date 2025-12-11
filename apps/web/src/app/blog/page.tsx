@@ -138,6 +138,7 @@ export default function BlogPage() {
             Contactează-ne
           </Link>
         </div>
+        </div>
       </div>
       <Footer />
     </>
