@@ -66,6 +66,19 @@ export interface StrapiScooter {
   };
 }
 
+export interface StrapiFaq {
+  id: number;
+  attributes: {
+    question: string;
+    answer: string;
+    category: 'general' | 'permis' | 'achizitie' | 'intretinere' | 'tehnic';
+    order: number;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+}
+
 interface StrapiResponse<T> {
   data: T;
   meta: {
@@ -156,6 +169,17 @@ export function getStrapiMediaUrl(media: StrapiMedia): string {
 
   // Otherwise, prepend Strapi URL
   return `${STRAPI_URL}${url}`;
+}
+
+// FAQ API functions
+export async function getFaqs(): Promise<StrapiFaq[]> {
+  const response = await fetchAPI<StrapiResponse<StrapiFaq[]>>(
+    '/faqs?sort=order:asc,id:asc',
+    {
+      cache: 'no-store',
+    }
+  );
+  return response.data;
 }
 
 export function getStrapiMediaUrls(media: StrapiMedia): string[] {

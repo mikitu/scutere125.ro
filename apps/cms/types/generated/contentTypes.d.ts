@@ -362,6 +362,36 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiFaqFaq extends Schema.CollectionType {
+  collectionName: 'faqs';
+  info: {
+    description: '\u00CEntreb\u0103ri frecvente';
+    displayName: 'FAQ';
+    pluralName: 'faqs';
+    singularName: 'faq';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    answer: Attribute.Text & Attribute.Required;
+    category: Attribute.Enumeration<
+      ['general', 'permis', 'achizitie', 'intretinere', 'tehnic']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'general'>;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::faq.faq', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    order: Attribute.Integer & Attribute.DefaultTo<0>;
+    publishedAt: Attribute.DateTime;
+    question: Attribute.String & Attribute.Required;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<'api::faq.faq', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiScooterColorScooterColor extends Schema.CollectionType {
   collectionName: 'scooter_colors';
   info: {
@@ -895,6 +925,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::faq.faq': ApiFaqFaq;
       'api::scooter-color.scooter-color': ApiScooterColorScooterColor;
       'api::scooter.scooter': ApiScooterScooter;
       'plugin::content-releases.release': PluginContentReleasesRelease;

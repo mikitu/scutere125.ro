@@ -105,8 +105,19 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Disclaimer */}
+        <div className="mt-12 pt-8 border-t border-white/10">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-8">
+            <p className="text-white/60 text-xs text-center leading-relaxed">
+              <span className="text-primary font-semibold">Notă importantă:</span> Informațiile afișate pe acest site au caracter informativ.
+              Nu răspundem de eventualele erori de afișaj sau modificări ale specificațiilor tehnice efectuate de producători.
+              Prețurile exacte, disponibilitatea și specificațiile complete vor fi confirmate prin oferta personalizată trimisă pe email.
+            </p>
+          </div>
+        </div>
+
         {/* Bottom */}
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
             © {new Date().getFullYear()} Scutere125.ro. Toate drepturile rezervate.
           </p>
