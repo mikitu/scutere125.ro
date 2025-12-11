@@ -13,18 +13,18 @@ export default function BlogPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-background py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Blog Scutere125.ro
-          </h1>
-          <p className="text-white/60 text-lg">
-            Recenzii, ghiduri și tot ce trebuie să știi despre scutere 125cc
-          </p>
-        </div>
+      <main className="pt-20">
+        <section className="py-24 bg-background">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+                <span className="gradient-text">Blog</span> Scutere125.ro
+              </h1>
+              <p className="text-xl text-white/60 max-w-3xl mx-auto">
+                Recenzii, ghiduri și tot ce trebuie să știi despre scutere 125cc
+              </p>
+            </div>
 
         {/* Coming Soon Card */}
         <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-12 text-center mb-12">
@@ -138,8 +138,9 @@ export default function BlogPage() {
             Contactează-ne
           </Link>
         </div>
-        </div>
-      </div>
+          </div>
+        </section>
+      </main>
       <Footer />
     </>
   );

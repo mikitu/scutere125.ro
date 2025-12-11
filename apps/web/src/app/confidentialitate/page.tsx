@@ -12,18 +12,18 @@ export default function ConfidentialitatePage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-background py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Politica de Confidențialitate
-          </h1>
-          <p className="text-white/60">
-            Ultima actualizare: {new Date().toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </p>
-        </div>
+      <main className="pt-20">
+        <section className="py-24 bg-background">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+                Politica de <span className="gradient-text">Confidențialitate</span>
+              </h1>
+              <p className="text-xl text-white/60 max-w-3xl mx-auto">
+                Ultima actualizare: {new Date().toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            </div>
 
         {/* Content */}
         <div className="prose prose-invert prose-lg max-w-none">
@@ -158,8 +158,8 @@ export default function ConfidentialitatePage() {
             </section>
           </div>
         </div>
-        </div>
-      </div>
+        </section>
+      </main>
       <Footer />
     </>
   );

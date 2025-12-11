@@ -34,18 +34,18 @@ export default async function FaqPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-background py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Întrebări Frecvente
-          </h1>
-          <p className="text-white/60 text-lg">
-            Găsește răspunsuri la cele mai frecvente întrebări despre scutere 125cc și permis B125
-          </p>
-        </div>
+      <main className="pt-20">
+        <section className="py-24 bg-background">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+                Întrebări <span className="gradient-text">Frecvente</span>
+              </h1>
+              <p className="text-xl text-white/60 max-w-3xl mx-auto">
+                Găsește răspunsuri la cele mai frecvente întrebări despre scutere 125cc și permis B125
+              </p>
+            </div>
 
         {/* FAQ Categories */}
         <div className="space-y-12">
@@ -95,8 +95,9 @@ export default async function FaqPage() {
             Contactează-ne
           </Link>
         </div>
-        </div>
-      </div>
+          </div>
+        </section>
+      </main>
       <Footer />
     </>
   );
