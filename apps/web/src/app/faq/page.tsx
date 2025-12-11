@@ -95,6 +95,7 @@ export default async function FaqPage() {
             Contactează-ne
           </Link>
         </div>
+        </div>
           </div>
         </section>
       </main>

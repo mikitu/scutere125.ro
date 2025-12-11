@@ -143,6 +143,7 @@ export default function CookiesPage() {
             </section>
           </div>
         </div>
+          </div>
         </section>
       </main>
       <Footer />

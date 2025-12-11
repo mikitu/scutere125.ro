@@ -126,6 +126,7 @@ export default function TermeniPage() {
             </section>
           </div>
         </div>
+          </div>
         </section>
       </main>
       <Footer />

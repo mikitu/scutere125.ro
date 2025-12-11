@@ -158,6 +158,7 @@ export default function ConfidentialitatePage() {
             </section>
           </div>
         </div>
+          </div>
         </section>
       </main>
       <Footer />
