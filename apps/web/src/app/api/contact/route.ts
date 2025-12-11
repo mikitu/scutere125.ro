@@ -24,10 +24,10 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, phone, scooter, message, recaptchaToken } = body;
+    const { name, email, phone, message, recaptchaToken } = body;
 
     // Validate required fields
-    if (!name || !email || !phone || !message) {
+    if (!name || !email || !message) {
       return NextResponse.json(
         { error: 'Toate câmpurile obligatorii trebuie completate.' },
         { status: 400 }
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
     // Save to Strapi
-    const strapiResponse = await fetch(`${STRAPI_URL}/api/quote-requests`, {
+    const strapiResponse = await fetch(`${STRAPI_URL}/api/contact-messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,8 +64,7 @@ export async function POST(request: NextRequest) {
         data: {
           name,
           email,
-          phone,
-          scooter: scooter || null,
+          phone: phone || null,
           message,
           ipAddress,
           userAgent,
@@ -77,24 +76,24 @@ export async function POST(request: NextRequest) {
     if (!strapiResponse.ok) {
       const errorData = await strapiResponse.json();
       console.error('Strapi error:', errorData);
-      throw new Error('Failed to save quote request to database');
+      throw new Error('Failed to save message to database');
     }
 
-    const savedRequest = await strapiResponse.json();
+    const savedMessage = await strapiResponse.json();
 
     // TODO: Send email notification
     // You can integrate with Resend, SendGrid, or other email service here
     // For now, we just log it
-    console.log('Quote request saved:', savedRequest.data.id);
+    console.log('Contact message saved:', savedMessage.data.id);
 
     return NextResponse.json({
       success: true,
-      message: 'Solicitarea ta a fost trimisă cu succes!',
+      message: 'Mesajul tău a fost trimis cu succes!',
     });
   } catch (error) {
-    console.error('Error processing quote request:', error);
+    console.error('Error processing contact form:', error);
     return NextResponse.json(
-      { error: 'A apărut o eroare la procesarea solicitării. Te rugăm să încerci din nou.' },
+      { error: 'A apărut o eroare la procesarea mesajului. Te rugăm să încerci din nou.' },
       { status: 500 }
     );
   }

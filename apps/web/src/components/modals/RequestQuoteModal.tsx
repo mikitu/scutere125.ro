@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface RequestQuoteModalProps {
   isOpen: boolean;
@@ -22,6 +23,8 @@ export function RequestQuoteModal({ isOpen, onClose, scooters, preselectedScoote
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   // Reset form when modal closes
   useEffect(() => {
@@ -69,26 +72,44 @@ export function RequestQuoteModal({ isOpen, onClose, scooters, preselectedScoote
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setErrorMessage('');
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await recaptchaRef.current?.executeAsync();
+      if (!recaptchaToken) {
+        throw new Error('Verificarea reCAPTCHA a eșuat. Te rugăm să încerci din nou.');
+      }
+
       const response = await fetch('/api/request-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken,
+        }),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'A apărut o eroare. Te rugăm să încerci din nou.');
+      }
 
       if (response.ok) {
         setSubmitStatus('success');
         setFormData({ name: '', email: '', phone: '', scooter: '', message: '' });
+        recaptchaRef.current?.reset();
         setTimeout(() => {
           onClose();
         }, 2000);
-      } else {
-        setSubmitStatus('error');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'A apărut o eroare. Te rugăm să încerci din nou.');
+      recaptchaRef.current?.reset();
     } finally {
       setIsSubmitting(false);
     }
@@ -243,9 +264,16 @@ export function RequestQuoteModal({ isOpen, onClose, scooters, preselectedScoote
                     {/* Error message */}
                     {submitStatus === 'error' && (
                       <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400 text-sm">
-                        A apărut o eroare. Te rugăm să încerci din nou sau să ne contactezi direct.
+                        ❌ {errorMessage || 'A apărut o eroare. Te rugăm să încerci din nou sau să ne contactezi direct.'}
                       </div>
                     )}
+
+                    {/* reCAPTCHA */}
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      size="invisible"
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                    />
 
                     {/* Submit button */}
                     <Button

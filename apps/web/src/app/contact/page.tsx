@@ -6,8 +6,9 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
 import { useQuoteModal } from '@/contexts/QuoteModalContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { fetchScootersForFooter } from '@/data/scooters';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const contactInfo = [
   {
@@ -40,10 +41,66 @@ const schedule = [
 export default function ContactPage() {
   const { openModal } = useQuoteModal();
   const [footerScooters, setFooterScooters] = useState<Array<{ name: string; slug: string }>>([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     fetchScootersForFooter().then(setFooterScooters);
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setErrorMessage('');
+
+    try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await recaptchaRef.current?.executeAsync();
+      if (!recaptchaToken) {
+        throw new Error('Verificarea reCAPTCHA a eșuat. Te rugăm să încerci din nou.');
+      }
+
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'A apărut o eroare. Te rugăm să încerci din nou.');
+      }
+
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      recaptchaRef.current?.reset();
+
+      // Hide success message after 5 seconds
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setSubmitStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'A apărut o eroare. Te rugăm să încerci din nou.');
+      recaptchaRef.current?.reset();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -146,47 +203,81 @@ export default function ContactPage() {
                     </Button>
                   </div>
                 </div>
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {submitStatus === 'success' && (
+                    <div className="bg-green-500/10 border border-green-500/50 rounded-lg p-4 text-green-400">
+                      ✅ Mesajul tău a fost trimis cu succes! Îți vom răspunde în cel mai scurt timp.
+                    </div>
+                  )}
+                  {submitStatus === 'error' && (
+                    <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4 text-red-400">
+                      ❌ {errorMessage}
+                    </div>
+                  )}
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-gray-400 mb-2">Nume</label>
+                      <label className="block text-gray-400 mb-2">Nume *</label>
                       <input
                         type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-[#e63946] focus:outline-none transition-colors"
                         placeholder="Numele tău"
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div>
                       <label className="block text-gray-400 mb-2">Telefon</label>
                       <input
                         type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-[#e63946] focus:outline-none transition-colors"
                         placeholder="+40 7XX XXX XXX"
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-2">Email</label>
+                    <label className="block text-gray-400 mb-2">Email *</label>
                     <input
                       type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-[#e63946] focus:outline-none transition-colors"
                       placeholder="email@exemplu.ro"
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-2">Mesaj</label>
+                    <label className="block text-gray-400 mb-2">Mesaj *</label>
                     <textarea
                       rows={6}
+                      required
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-[#e63946] focus:outline-none transition-colors resize-none"
                       placeholder="Scrie mesajul tău aici..."
+                      disabled={isSubmitting}
                     />
                   </div>
+
+                  {/* reCAPTCHA */}
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                  />
+
                   <button
                     type="submit"
-                    className="w-full bg-linear-to-r from-[#e63946] to-[#f4a261] text-white font-semibold py-4 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                    className="w-full bg-linear-to-r from-[#e63946] to-[#f4a261] text-white font-semibold py-4 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send className="w-5 h-5" />
-                    Trimite Mesajul
+                    {isSubmitting ? 'Se trimite...' : 'Trimite Mesajul'}
                   </button>
                 </form>
               </motion.div>

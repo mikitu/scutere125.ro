@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "quote_requests",
+  "info": {
+    "singularName": "quote-request",
+    "pluralName": "quote-requests",
+    "displayName": "Quote Request",
+    "description": "Quote requests submitted through the request quote form"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "scooter": {
+      "type": "string"
+    },
+    "message": {
+      "type": "text"
+    },
+    "emailSent": {
+      "type": "boolean",
+      "default": false
+    },
+    "emailSentAt": {
+      "type": "datetime"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "userAgent": {
+      "type": "string"
+    }
+  }
+}
+
