@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft, Phone, MessageCircle, Check, Fuel, Gauge, Weight, Armchair, Package, Settings } from 'lucide-react';
+import { ArrowLeft, Phone, MessageCircle, Check, Fuel, Gauge, Weight, Armchair, Package, Settings, CreditCard } from 'lucide-react';
 import { Scooter, ScooterColor } from '@/data/scooters';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
@@ -127,15 +127,49 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
             )}
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Button variant="primary" size="lg" className="flex-1">
-                <Phone className="w-5 h-5" />
-                Solicită ofertă
-              </Button>
-              <Button variant="outline" size="lg" className="flex-1">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <Button
+                variant="primary"
+                size="lg"
+                className="flex-1"
+                href={`https://wa.me/40772129775?text=${encodeURIComponent(`Bună ziua! Sunt interesat de ${scooter.name}${selectedColor ? ` în culoarea ${selectedColor.name}` : ''}. Aș dori mai multe detalii.`)}`}
+              >
                 <MessageCircle className="w-5 h-5" />
-                Întreabă-ne
+                Cumpără Acum
               </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="flex-1"
+                href="tel:+40774515065"
+              >
+                <CreditCard className="w-5 h-5" />
+                Cumpără în Rate
+              </Button>
+            </div>
+
+            {/* Purchase info */}
+            <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-white/60 mb-1">
+                    <MessageCircle className="w-4 h-4 inline mr-1" />
+                    <strong className="text-white">Cumpără Acum:</strong>
+                  </p>
+                  <p className="text-white/80">
+                    Trimite mesaj pe WhatsApp și primești ofertă personalizată instant
+                  </p>
+                </div>
+                <div>
+                  <p className="text-white/60 mb-1">
+                    <CreditCard className="w-4 h-4 inline mr-1" />
+                    <strong className="text-white">Cumpără în Rate:</strong>
+                  </p>
+                  <p className="text-white/80">
+                    Sună la finanțare pentru rate avantajoase fără avans
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Features list */}
