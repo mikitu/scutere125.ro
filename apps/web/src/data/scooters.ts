@@ -178,3 +178,20 @@ export async function fetchScooterBySlug(slug: string): Promise<Scooter | null> 
   }
 }
 
+export async function fetchScootersForQuoteModal(): Promise<Array<{ id: number; name: string; slug: string }>> {
+  try {
+    const allScooters = await fetchScooters();
+    return allScooters.map((scooter, index) => ({
+      id: index + 1,
+      name: scooter.name,
+      slug: scooter.slug,
+    }));
+  } catch (error) {
+    console.error('Error fetching scooters for quote modal:', error);
+    return scooters.map((scooter, index) => ({
+      id: index + 1,
+      name: scooter.name,
+      slug: scooter.slug,
+    }));
+  }
+}

@@ -1,9 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, FileText } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { Button } from '@/components/ui/Button';
+import { useQuoteModal } from '@/contexts/QuoteModalContext';
 
 const contactInfo = [
   {
@@ -34,13 +36,15 @@ const schedule = [
 ];
 
 export default function ContactPage() {
+  const { openModal } = useQuoteModal();
+
   return (
     <>
       <Header />
       <main className="min-h-screen bg-[#0a0a0a] pt-24">
         {/* Hero Section */}
         <section className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#e63946]/10 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-b from-[#e63946]/10 to-transparent" />
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -118,9 +122,23 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h2 className="text-3xl font-bold text-white mb-8">
-                  Trimite-ne un <span className="text-[#e63946]">Mesaj</span>
-                </h2>
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-3xl font-bold text-white">
+                    Trimite-ne un <span className="text-[#e63946]">Mesaj</span>
+                  </h2>
+                  <div className="flex items-center gap-2 text-white/60 text-sm">
+                    <span>sau</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openModal()}
+                      className="whitespace-nowrap"
+                    >
+                      <FileText className="w-4 h-4" />
+                      Solicită Ofertă
+                    </Button>
+                  </div>
+                </div>
                 <form className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
@@ -149,25 +167,16 @@ export default function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-2">Scuter de interes</label>
-                    <select className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-[#e63946] focus:outline-none transition-colors">
-                      <option value="">Selectează un model</option>
-                      <option value="sh-mode-125">Honda SH Mode 125</option>
-                      <option value="pcx-125">Honda PCX 125</option>
-                      <option value="forza-125">Honda Forza 125</option>
-                    </select>
-                  </div>
-                  <div>
                     <label className="block text-gray-400 mb-2">Mesaj</label>
                     <textarea
-                      rows={5}
+                      rows={6}
                       className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-[#e63946] focus:outline-none transition-colors resize-none"
                       placeholder="Scrie mesajul tău aici..."
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-[#e63946] to-[#f4a261] text-white font-semibold py-4 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                    className="w-full bg-linear-to-r from-[#e63946] to-[#f4a261] text-white font-semibold py-4 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
                   >
                     <Send className="w-5 h-5" />
                     Trimite Mesajul
