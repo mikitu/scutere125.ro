@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Politica de Confidențialitate | Scutere125.ro',
@@ -9,16 +9,10 @@ export const metadata: Metadata = {
 
 export default function ConfidentialitatePage() {
   return (
-    <div className="min-h-screen bg-background py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Înapoi la pagina principală</span>
-        </Link>
+    <>
+      <Header />
+      <div className="min-h-screen bg-background py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <div className="mb-12">
@@ -164,7 +158,8 @@ export default function ConfidentialitatePage() {
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
 

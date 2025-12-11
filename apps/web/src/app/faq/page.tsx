@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
+import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import { ArrowLeft, ChevronDown } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import { getFaqs } from '@/lib/strapi';
 
 export const metadata: Metadata = {
@@ -18,7 +20,7 @@ const categoryLabels = {
 
 export default async function FaqPage() {
   const faqs = await getFaqs();
-  
+
   // Group FAQs by category
   const faqsByCategory = faqs.reduce((acc, faq) => {
     const category = faq.attributes.category;
@@ -30,16 +32,10 @@ export default async function FaqPage() {
   }, {} as Record<string, typeof faqs>);
 
   return (
-    <div className="min-h-screen bg-background py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Înapoi la pagina principală</span>
-        </Link>
+    <>
+      <Header />
+      <div className="min-h-screen bg-background py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <div className="mb-12">
@@ -100,7 +96,8 @@ export default async function FaqPage() {
           </Link>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
 
