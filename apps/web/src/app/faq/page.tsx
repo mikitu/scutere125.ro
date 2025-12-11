@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { getFaqs } from '@/lib/strapi';
 
 export const metadata: Metadata = {
