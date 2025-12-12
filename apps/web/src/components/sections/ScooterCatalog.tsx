@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -229,13 +230,25 @@ function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
 }
 
 export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
+  const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedManufacturer, setSelectedManufacturer] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
 
-  // Filter scooters based on selected category
-  const filteredScooters = selectedCategory
-    ? scooters.filter(scooter => scooter.category === selectedCategory)
-    : scooters;
+  // Read manufacturer from URL on mount
+  useEffect(() => {
+    const manufacturerParam = searchParams.get('manufacturer');
+    if (manufacturerParam) {
+      setSelectedManufacturer(manufacturerParam);
+    }
+  }, [searchParams]);
+
+  // Filter scooters based on selected category and manufacturer
+  const filteredScooters = scooters.filter(scooter => {
+    const categoryMatch = !selectedCategory || scooter.category === selectedCategory;
+    const manufacturerMatch = !selectedManufacturer || scooter.manufacturer === selectedManufacturer;
+    return categoryMatch && manufacturerMatch;
+  });
 
   // Get badge variant based on category
   const getCategoryVariant = (categorySlug: string) => {

@@ -29,6 +29,7 @@ export interface Scooter {
   };
   features: string[];
   category: 'urban' | 'sport' | 'premium';
+  manufacturer: 'Honda' | 'Yamaha' | 'Suzuki' | 'Sym' | 'Kymco' | 'Daytona' | 'Piaggio' | 'Aprilia' | 'Royal Enfield' | 'SWM';
   badge?: string;
   colors?: ScooterColor[];
 }

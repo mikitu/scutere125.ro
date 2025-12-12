@@ -4,14 +4,20 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react';
 
-interface FooterScooter {
-  name: string;
-  slug: string;
+interface FooterProps {
+  scooters?: any[]; // Not used anymore, kept for backward compatibility
 }
 
-interface FooterProps {
-  scooters?: FooterScooter[];
-}
+const manufacturers = [
+  { name: 'Honda', slug: 'Honda' },
+  { name: 'Yamaha', slug: 'Yamaha' },
+  { name: 'Suzuki', slug: 'Suzuki' },
+  { name: 'Sym', slug: 'Sym' },
+  { name: 'Kymco', slug: 'Kymco' },
+  { name: 'Daytona', slug: 'Daytona' },
+  { name: 'Piaggio', slug: 'Piaggio' },
+  { name: 'Aprilia', slug: 'Aprilia' },
+];
 
 const footerLinks = {
   informatii: [
@@ -31,7 +37,7 @@ export function Footer({ scooters = [] }: FooterProps) {
   return (
     <footer className="bg-linear-to-b from-background to-black border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="inline-block">
@@ -54,25 +60,37 @@ export function Footer({ scooters = [] }: FooterProps) {
             </div>
           </div>
 
-          {/* Scutere 125cc */}
+          {/* Producători - Column 1 */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Scutere 125cc</h4>
+            <h4 className="text-white font-semibold mb-4">Producători</h4>
             <ul className="space-y-2">
-              {scooters.length > 0 ? (
-                scooters.map((scooter) => (
-                  <li key={scooter.slug}>
-                    <Link href={`/scutere-125/${scooter.slug}`} className="text-white/60 hover:text-white text-sm transition-colors">
-                      {scooter.name}
-                    </Link>
-                  </li>
-                ))
-              ) : (
-                <li>
-                  <Link href="/scutere-125" className="text-white/60 hover:text-white text-sm transition-colors">
-                    Vezi toate scuterele
+              {manufacturers.slice(0, 4).map((manufacturer) => (
+                <li key={manufacturer.slug}>
+                  <Link
+                    href={`/scutere-125?manufacturer=${manufacturer.slug}`}
+                    className="text-white/60 hover:text-white text-sm transition-colors"
+                  >
+                    {manufacturer.name}
                   </Link>
                 </li>
-              )}
+              ))}
+            </ul>
+          </div>
+
+          {/* Producători - Column 2 */}
+          <div>
+            <h4 className="text-white font-semibold mb-4 invisible">Producători</h4>
+            <ul className="space-y-2">
+              {manufacturers.slice(4, 8).map((manufacturer) => (
+                <li key={manufacturer.slug}>
+                  <Link
+                    href={`/scutere-125?manufacturer=${manufacturer.slug}`}
+                    className="text-white/60 hover:text-white text-sm transition-colors"
+                  >
+                    {manufacturer.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

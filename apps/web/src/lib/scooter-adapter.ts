@@ -52,6 +52,7 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
     },
     features: attributes.features,
     category: attributes.category,
+    manufacturer: attributes.manufacturer,
     badge: attributes.badge,
     colors,
   };

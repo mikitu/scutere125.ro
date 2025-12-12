@@ -99,6 +99,11 @@
       "target": "api::category.category",
       "inversedBy": "scooters"
     },
+    "manufacturer": {
+      "type": "enumeration",
+      "enum": ["Honda", "Yamaha", "Suzuki", "Sym", "Kymco", "Daytona", "Piaggio", "Aprilia", "Royal Enfield", "SWM"],
+      "required": true
+    },
     "badge": {
       "type": "string"
     },

@@ -69,6 +69,7 @@ export interface StrapiScooter {
     storage: string;
     features: string[];
     category: 'urban' | 'sport' | 'premium';
+    manufacturer: 'Honda' | 'Yamaha' | 'Suzuki' | 'Sym' | 'Kymco' | 'Daytona' | 'Piaggio' | 'Aprilia' | 'Royal Enfield' | 'SWM';
     badge?: string;
     showOnHomepage?: boolean;
     colors?: {
