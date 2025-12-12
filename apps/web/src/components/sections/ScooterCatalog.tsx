@@ -4,13 +4,15 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Fuel, Gauge, Weight, Check } from 'lucide-react';
+import { ArrowRight, Fuel, Gauge, Weight, Check, LayoutGrid, LayoutList } from 'lucide-react';
 import { Scooter, ScooterColor } from '@/data/scooters';
 import { formatPrice } from '@/lib/utils';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ColorIndicator } from '@/components/ui/ColorIndicator';
+
+type ViewMode = 'list' | 'grid';
 
 interface Category {
   id: number;
@@ -26,6 +28,89 @@ interface ScooterCatalogProps {
   categories: Category[];
 }
 
+// Grid view card component (similar to homepage)
+function ScooterGridCard({ scooter, index }: { scooter: Scooter; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: index * 0.1 }}
+    >
+      <Card className="h-full flex flex-col overflow-hidden group">
+        {/* Image container - landscape aspect ratio */}
+        <div className="relative aspect-[16/10] bg-gradient-to-br from-white/5 to-transparent overflow-hidden">
+          {scooter.badge && (
+            <div className="absolute top-4 left-4 z-10">
+              <Badge variant={scooter.category === 'premium' ? 'accent' : scooter.category === 'sport' ? 'primary' : 'success'}>
+                {scooter.badge}
+              </Badge>
+            </div>
+          )}
+          <motion.div
+            className="absolute inset-0"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Image
+              src={scooter.listingImage}
+              alt={scooter.name}
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </motion.div>
+          {/* Glow effect on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
+        </div>
+
+        {/* Content */}
+        <div className="p-6 flex-1 flex flex-col">
+          <div className="mb-4">
+            <p className="text-primary text-sm font-medium mb-1">{scooter.tagline}</p>
+            <h3 className="text-2xl font-bold text-white mb-2">{scooter.name}</h3>
+            <p className="text-white/60 text-sm line-clamp-2">{scooter.description}</p>
+          </div>
+
+          {/* Quick specs */}
+          <div className="grid grid-cols-3 gap-4 py-4 border-y border-white/10 mb-4">
+            <div className="text-center">
+              <Gauge className="w-4 h-4 text-primary mx-auto mb-1" />
+              <p className="text-xs text-white/40">Putere</p>
+              <p className="text-sm text-white font-medium">{scooter.specs.power}</p>
+            </div>
+            <div className="text-center">
+              <Fuel className="w-4 h-4 text-primary mx-auto mb-1" />
+              <p className="text-xs text-white/40">Consum</p>
+              <p className="text-sm text-white font-medium">{scooter.specs.consumption}</p>
+            </div>
+            <div className="text-center">
+              <Weight className="w-4 h-4 text-primary mx-auto mb-1" />
+              <p className="text-xs text-white/40">Greutate</p>
+              <p className="text-sm text-white font-medium">{scooter.specs.weight}</p>
+            </div>
+          </div>
+
+          {/* Price and CTA */}
+          <div className="mt-auto flex items-center justify-between">
+            <div>
+              <p className="text-xs text-white/40">de la</p>
+              <p className="text-2xl font-bold text-white">
+                {formatPrice(scooter.price)}
+              </p>
+            </div>
+            <Link href={`/scutere-125/${scooter.slug}`}>
+              <Button variant="primary" size="sm">
+                Detalii <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </Card>
+    </motion.div>
+  );
+}
+
+// List view card component (current design)
 function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
   const [selectedColor, setSelectedColor] = useState<ScooterColor | null>(
     scooter.colors && scooter.colors.length > 0 ? scooter.colors[0] : null
@@ -145,6 +230,7 @@ function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
 
 export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   // Filter scooters based on selected category
   const filteredScooters = selectedCategory
@@ -184,38 +270,80 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
           </p>
         </motion.div>
 
-        {/* Filter badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
-        >
-          <Badge
-            variant={selectedCategory === null ? 'primary' : 'secondary'}
-            className="cursor-pointer hover:bg-primary/30"
-            onClick={() => setSelectedCategory(null)}
+        {/* Filter badges and view toggle */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12">
+          {/* Category filters */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-wrap justify-center gap-3"
           >
-            Toate
-          </Badge>
-          {categories.map(category => (
             <Badge
-              key={category.id}
-              variant={selectedCategory === category.slug ? getCategoryVariant(category.slug) : 'secondary'}
+              variant={selectedCategory === null ? 'primary' : 'secondary'}
               className="cursor-pointer hover:bg-primary/30"
-              onClick={() => setSelectedCategory(category.slug)}
+              onClick={() => setSelectedCategory(null)}
             >
-              {category.displayName}
+              Toate
             </Badge>
-          ))}
-        </motion.div>
+            {categories.map(category => (
+              <Badge
+                key={category.id}
+                variant={selectedCategory === category.slug ? getCategoryVariant(category.slug) : 'secondary'}
+                className="cursor-pointer hover:bg-primary/30"
+                onClick={() => setSelectedCategory(category.slug)}
+              >
+                {category.displayName}
+              </Badge>
+            ))}
+          </motion.div>
 
-        {/* Scooter list */}
-        <div className="space-y-8">
-          {filteredScooters.map((scooter, index) => (
-            <ScooterCard key={scooter.id} scooter={scooter} index={index} />
-          ))}
+          {/* View mode toggle */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex gap-2 bg-white/5 rounded-lg p-1"
+          >
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded transition-all ${
+                viewMode === 'list'
+                  ? 'bg-primary text-white'
+                  : 'text-white/60 hover:text-white hover:bg-white/10'
+              }`}
+              aria-label="List view"
+            >
+              <LayoutList className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-primary text-white'
+                  : 'text-white/60 hover:text-white hover:bg-white/10'
+              }`}
+              aria-label="Grid view"
+            >
+              <LayoutGrid className="w-5 h-5" />
+            </button>
+          </motion.div>
         </div>
+
+        {/* Scooter list or grid */}
+        {viewMode === 'list' ? (
+          <div className="space-y-8">
+            {filteredScooters.map((scooter, index) => (
+              <ScooterCard key={scooter.id} scooter={scooter} index={index} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredScooters.map((scooter, index) => (
+              <ScooterGridCard key={scooter.id} scooter={scooter} index={index} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
