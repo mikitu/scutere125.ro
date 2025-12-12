@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ScooterCatalog } from '@/components/sections/ScooterCatalog';
 import { fetchScooters, fetchScootersForFooter } from '@/data/scooters';
+import { getCategories } from '@/lib/strapi';
 
 export const metadata: Metadata = {
   title: 'Catalog Scutere 125cc | Scutere ieftine conform legii B125 | Scutere125.ro',
@@ -13,11 +14,33 @@ export default async function ScuterePage() {
   const scooters = await fetchScooters();
   const footerScooters = await fetchScootersForFooter();
 
+  // Fetch categories from Strapi
+  let categories = [];
+  try {
+    const strapiCategories = await getCategories();
+    categories = strapiCategories.map(cat => ({
+      id: cat.id,
+      name: cat.attributes.name,
+      slug: cat.attributes.slug,
+      displayName: cat.attributes.displayName,
+      icon: cat.attributes.icon,
+      order: cat.attributes.order,
+    }));
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    // Fallback to default categories
+    categories = [
+      { id: 1, name: 'urban', slug: 'urban', displayName: 'Urban', icon: 'building', order: 1 },
+      { id: 2, name: 'premium', slug: 'premium', displayName: 'Premium', icon: 'star', order: 2 },
+      { id: 3, name: 'sport', slug: 'sport', displayName: 'Sport', icon: 'zap', order: 3 },
+    ];
+  }
+
   return (
     <>
       <Header />
       <main className="pt-20">
-        <ScooterCatalog scooters={scooters} />
+        <ScooterCatalog scooters={scooters} categories={categories} />
       </main>
       <Footer scooters={footerScooters} />
     </>

@@ -91,7 +91,13 @@
     "category": {
       "type": "enumeration",
       "enum": ["urban", "sport", "premium"],
-      "required": true
+      "required": false
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "inversedBy": "scooters"
     },
     "badge": {
       "type": "string"

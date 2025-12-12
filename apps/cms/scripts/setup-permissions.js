@@ -26,6 +26,8 @@ async function setupPermissions() {
       'api::scooter.scooter.findOne',
       'api::scooter-color.scooter-color.find',
       'api::scooter-color.scooter-color.findOne',
+      'api::category.category.find',
+      'api::category.category.findOne',
     ];
 
     for (const action of permissions) {

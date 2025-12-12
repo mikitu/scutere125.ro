@@ -12,8 +12,18 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ColorIndicator } from '@/components/ui/ColorIndicator';
 
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  displayName: string;
+  icon?: string;
+  order: number;
+}
+
 interface ScooterCatalogProps {
   scooters: Scooter[];
+  categories: Category[];
 }
 
 function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
@@ -133,7 +143,28 @@ function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
   );
 }
 
-export function ScooterCatalog({ scooters }: ScooterCatalogProps) {
+export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // Filter scooters based on selected category
+  const filteredScooters = selectedCategory
+    ? scooters.filter(scooter => scooter.category === selectedCategory)
+    : scooters;
+
+  // Get badge variant based on category
+  const getCategoryVariant = (categorySlug: string) => {
+    switch (categorySlug) {
+      case 'urban':
+        return 'secondary';
+      case 'premium':
+        return 'accent';
+      case 'sport':
+        return 'success';
+      default:
+        return 'secondary';
+    }
+  };
+
   return (
     <section className="py-16 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -160,15 +191,28 @@ export function ScooterCatalog({ scooters }: ScooterCatalogProps) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
-          <Badge variant="primary" className="cursor-pointer hover:bg-primary/30">Toate</Badge>
-          <Badge variant="secondary" className="cursor-pointer hover:bg-secondary/30">Urban</Badge>
-          <Badge variant="accent" className="cursor-pointer hover:bg-accent/30">Premium</Badge>
-          <Badge variant="success" className="cursor-pointer hover:bg-green-500/30">Sport</Badge>
+          <Badge
+            variant={selectedCategory === null ? 'primary' : 'secondary'}
+            className="cursor-pointer hover:bg-primary/30"
+            onClick={() => setSelectedCategory(null)}
+          >
+            Toate
+          </Badge>
+          {categories.map(category => (
+            <Badge
+              key={category.id}
+              variant={selectedCategory === category.slug ? getCategoryVariant(category.slug) : 'secondary'}
+              className="cursor-pointer hover:bg-primary/30"
+              onClick={() => setSelectedCategory(category.slug)}
+            >
+              {category.displayName}
+            </Badge>
+          ))}
         </motion.div>
 
         {/* Scooter list */}
         <div className="space-y-8">
-          {scooters.map((scooter, index) => (
+          {filteredScooters.map((scooter, index) => (
             <ScooterCard key={scooter.id} scooter={scooter} index={index} />
           ))}
         </div>

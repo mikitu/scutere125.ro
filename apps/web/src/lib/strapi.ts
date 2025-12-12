@@ -19,6 +19,20 @@ interface StrapiMedia {
   data: StrapiImage | StrapiImage[] | null;
 }
 
+export interface StrapiCategory {
+  id: number;
+  attributes: {
+    name: string;
+    slug: string;
+    displayName: string;
+    icon?: string;
+    order: number;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+}
+
 export interface StrapiScooterColor {
   id: number;
   attributes: {
@@ -169,6 +183,17 @@ export function getStrapiMediaUrl(media: StrapiMedia): string {
 
   // Otherwise, prepend Strapi URL
   return `${STRAPI_URL}${url}`;
+}
+
+// Category API functions
+export async function getCategories(): Promise<StrapiCategory[]> {
+  const response = await fetchAPI<StrapiResponse<StrapiCategory[]>>(
+    '/categories?sort=order:asc',
+    {
+      cache: 'no-store',
+    }
+  );
+  return response.data;
 }
 
 // FAQ API functions
