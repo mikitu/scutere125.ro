@@ -6,7 +6,7 @@
   "scripts": {
     "develop": "strapi develop",
     "dev": "strapi develop",
-    "start": "strapi start",
+    "start": "node -e \"console.log('ENV CHECK:', {API_TOKEN_SALT: process.env.API_TOKEN_SALT ? 'SET' : 'MISSING', ADMIN_JWT_SECRET: process.env.ADMIN_JWT_SECRET ? 'SET' : 'MISSING', APP_KEYS: process.env.APP_KEYS ? 'SET' : 'MISSING'})\" && strapi start",
     "build": "strapi build",
     "strapi": "strapi",
     "postinstall": "npm rebuild sharp || true"
