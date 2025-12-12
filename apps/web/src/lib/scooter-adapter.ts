@@ -31,6 +31,14 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
     ? attributes.colors.data.map(adaptStrapiScooterColor)
     : undefined;
 
+  // Extract category slugs from the manyToMany relation
+  const categories = attributes.categories?.data?.length
+    ? attributes.categories.data.map(cat => cat.attributes.slug)
+    : [];
+
+  // Fallback to old category field if categories relation is empty
+  const category = categories.length > 0 ? categories[0] as 'urban' | 'sport' | 'premium' : attributes.category;
+
   return {
     id: attributes.slug,
     name: attributes.name,
@@ -51,7 +59,8 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
       storage: attributes.storage,
     },
     features: attributes.features,
-    category: attributes.category,
+    category, // Keep for backward compatibility
+    categories, // New field with all category slugs
     manufacturer: attributes.manufacturer,
     badge: attributes.badge,
     colors,

@@ -68,7 +68,10 @@ export interface StrapiScooter {
     seatHeight: string;
     storage: string;
     features: string[];
-    category: 'urban' | 'sport' | 'premium';
+    category: 'urban' | 'sport' | 'premium'; // Deprecated field
+    categories?: {
+      data: StrapiCategory[];
+    };
     manufacturer: 'Honda' | 'Yamaha' | 'Suzuki' | 'Sym' | 'Kymco' | 'Daytona' | 'Piaggio' | 'Aprilia' | 'Royal Enfield' | 'SWM';
     badge?: string;
     showOnHomepage?: boolean;

@@ -245,7 +245,8 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
 
   // Filter scooters based on selected category and manufacturer
   const filteredScooters = scooters.filter(scooter => {
-    const categoryMatch = !selectedCategory || scooter.category === selectedCategory;
+    // Check if scooter has the selected category in its categories array
+    const categoryMatch = !selectedCategory || scooter.categories.includes(selectedCategory);
     const manufacturerMatch = !selectedManufacturer || scooter.manufacturer === selectedManufacturer;
     return categoryMatch && manufacturerMatch;
   });
