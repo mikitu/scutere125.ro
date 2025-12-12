@@ -98,9 +98,9 @@ export function Footer({ scooters = [] }: FooterProps) {
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-3">
               <li>
-                <a href="tel:+40752312097" className="flex items-center gap-3 text-white/60 text-sm hover:text-white transition-colors">
+                <a href="tel:+40772129775" className="flex items-center gap-3 text-white/60 text-sm hover:text-white transition-colors">
                   <Phone className="w-4 h-4 text-primary" />
-                  <span>+40 752 312 097</span>
+                  <span>+40 772 129 775</span>
                 </a>
               </li>
               <li>

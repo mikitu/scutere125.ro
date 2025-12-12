@@ -84,9 +84,9 @@ export function Header() {
 
             {/* CTA Button */}
             <div className="hidden md:flex items-center gap-4">
-              <a href="tel:+40752312097" className="flex items-center gap-2 text-white/80 hover:text-white">
+              <a href="tel:+40772129775" className="flex items-center gap-2 text-white/80 hover:text-white">
                 <Phone className="w-4 h-4" />
-                <span>0752 312 097</span>
+                <span>0772 129 775</span>
               </a>
               <Button variant="primary" size="sm" onClick={handleRequestQuote}>
                 Solicită ofertă

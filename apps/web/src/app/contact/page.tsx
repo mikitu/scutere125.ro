@@ -14,8 +14,8 @@ const contactInfo = [
   {
     icon: Phone,
     title: 'Telefon',
-    value: '+40 752 312 097',
-    href: 'tel:+40752312097',
+    value: '+40 772 129 775',
+    href: 'tel:+40772129775',
   },
   {
     icon: Mail,
@@ -34,7 +34,7 @@ const contactInfo = [
 const schedule = [
   { day: 'Luni', hours: '10:00 - 15:00' },
   { day: 'Marți - Vineri', hours: '09:00 - 18:00' },
-  { day: 'Sâmbătă', hours: '09:00 - 18:00' },
+  { day: 'Sâmbătă', hours: '10:00 - 17:00' },
   { day: 'Duminică', hours: 'Închis' },
 ];
 
