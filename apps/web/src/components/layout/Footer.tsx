@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Facebook, Instagram, Youtube } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react';
 
 interface FooterScooter {
   name: string;
@@ -45,14 +45,11 @@ export function Footer({ scooters = [] }: FooterProps) {
               Pe drum, cu încredere. Cele mai bune scutere 125cc pentru permis B125 din România.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-white/60 hover:text-primary transition-colors">
+              <a href="https://www.facebook.com/estbikecampina" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-primary transition-colors" aria-label="Facebook">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-white/60 hover:text-primary transition-colors">
+              <a href="https://www.instagram.com/estbikecampina/" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-primary transition-colors" aria-label="Instagram">
                 <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-white/60 hover:text-primary transition-colors">
-                <Youtube className="w-5 h-5" />
               </a>
             </div>
           </div>
