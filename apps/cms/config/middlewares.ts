@@ -7,7 +7,7 @@ export default [
   'strapi::query',
   'strapi::body',
   'strapi::session',
-  // 'strapi::favicon', // Disabled - no favicon.ico file
+  'strapi::favicon',
   'strapi::public',
 ];
 
