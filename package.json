@@ -10,6 +10,10 @@
     "dev:cms": "pnpm --filter @scutere125/cms dev",
     "build": "pnpm -r run build",
     "build:web": "pnpm --filter @scutere125/web build",
+    "build:cms": "pnpm --filter @scutere125/cms build",
+    "start": "pnpm --filter @scutere125/cms start",
+    "start:cms": "pnpm --filter @scutere125/cms start",
+    "start:web": "pnpm --filter @scutere125/web start",
     "lint": "pnpm -r run lint",
     "clean": "pnpm -r exec rm -rf node_modules && rm -rf node_modules"
   },
