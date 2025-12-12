@@ -24,6 +24,8 @@ async function setupPermissions() {
     const permissions = [
       'api::scooter.scooter.find',
       'api::scooter.scooter.findOne',
+      'api::scooter-color.scooter-color.find',
+      'api::scooter-color.scooter-color.findOne',
     ];
 
     for (const action of permissions) {
