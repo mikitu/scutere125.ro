@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'scutere125-ro.onrender.com',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'static.honda.ro',
         pathname: '/**',
       },
