@@ -250,6 +250,18 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
     return categoryMatch && manufacturerMatch;
   });
 
+  // Handle category click - reset manufacturer filter
+  const handleCategoryClick = (categorySlug: string | null) => {
+    setSelectedCategory(categorySlug);
+    setSelectedManufacturer(null);
+  };
+
+  // Handle clear all filters
+  const handleClearFilters = () => {
+    setSelectedCategory(null);
+    setSelectedManufacturer(null);
+  };
+
   // Get badge variant based on category
   const getCategoryVariant = (categorySlug: string) => {
     switch (categorySlug) {
@@ -283,6 +295,30 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
           </p>
         </motion.div>
 
+        {/* Active manufacturer filter */}
+        {selectedManufacturer && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="mb-6 text-center"
+          >
+            <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/30 rounded-lg px-4 py-2">
+              <span className="text-white/80">Filtrare după producător:</span>
+              <Badge variant="primary" className="font-semibold">
+                {selectedManufacturer}
+              </Badge>
+              <button
+                onClick={handleClearFilters}
+                className="ml-2 text-white/60 hover:text-white transition-colors"
+                aria-label="Clear filter"
+              >
+                ✕
+              </button>
+            </div>
+          </motion.div>
+        )}
+
         {/* Filter badges and view toggle */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12">
           {/* Category filters */}
@@ -293,9 +329,9 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
             className="flex flex-wrap justify-center gap-3"
           >
             <Badge
-              variant={selectedCategory === null ? 'primary' : 'secondary'}
+              variant={selectedCategory === null && selectedManufacturer === null ? 'primary' : 'secondary'}
               className="cursor-pointer hover:bg-primary/30"
-              onClick={() => setSelectedCategory(null)}
+              onClick={handleClearFilters}
             >
               Toate
             </Badge>
@@ -304,7 +340,7 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
                 key={category.id}
                 variant={selectedCategory === category.slug ? getCategoryVariant(category.slug) : 'secondary'}
                 className="cursor-pointer hover:bg-primary/30"
-                onClick={() => setSelectedCategory(category.slug)}
+                onClick={() => handleCategoryClick(category.slug)}
               >
                 {category.displayName}
               </Badge>
@@ -344,7 +380,34 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
         </div>
 
         {/* Scooter list or grid */}
-        {viewMode === 'list' ? (
+        {filteredScooters.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center py-20"
+          >
+            <div className="max-w-2xl mx-auto">
+              <div className="text-6xl mb-6">🏍️</div>
+              <h3 className="text-2xl font-bold text-white mb-4">
+                {selectedManufacturer ? `Scutere ${selectedManufacturer} în curând!` : 'Niciun scuter găsit'}
+              </h3>
+              <p className="text-lg text-white/60 mb-8">
+                {selectedManufacturer
+                  ? `Stai p'aci că băgăm marfa! Scuterele ${selectedManufacturer} vor fi disponibile în curând. Între timp, explorează celelalte modele.`
+                  : 'Nu am găsit scutere care să corespundă filtrelor tale. Încearcă să modifici criteriile de căutare.'
+                }
+              </p>
+              <Button
+                onClick={handleClearFilters}
+                variant="primary"
+                size="lg"
+              >
+                Vezi toate scuterele
+              </Button>
+            </div>
+          </motion.div>
+        ) : viewMode === 'list' ? (
           <div className="space-y-8">
             {filteredScooters.map((scooter, index) => (
               <ScooterCard key={scooter.id} scooter={scooter} index={index} />
