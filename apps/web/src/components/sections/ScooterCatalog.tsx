@@ -267,7 +267,7 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
   const getCategoryVariant = (categorySlug: string) => {
     switch (categorySlug) {
       case 'urban':
-        return 'secondary';
+        return 'primary';
       case 'premium':
         return 'accent';
       case 'sport':
