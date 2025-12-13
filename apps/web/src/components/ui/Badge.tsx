@@ -9,9 +9,10 @@ interface BadgeProps {
   variant?: 'primary' | 'secondary' | 'accent' | 'success';
   className?: string;
   pulse?: boolean;
+  onClick?: () => void;
 }
 
-export function Badge({ children, variant = 'primary', className, pulse = false }: BadgeProps) {
+export function Badge({ children, variant = 'primary', className, pulse = false, onClick }: BadgeProps) {
   const variants = {
     primary: 'bg-primary text-white border-primary shadow-lg shadow-primary/30',
     secondary: 'bg-secondary text-white border-secondary shadow-lg shadow-secondary/30',
@@ -19,8 +20,12 @@ export function Badge({ children, variant = 'primary', className, pulse = false 
     success: 'bg-green-500 text-white border-green-600 shadow-lg shadow-green-500/30',
   };
 
+  const Component = onClick ? motion.button : motion.span;
+
   return (
-    <motion.span
+    <Component
+      onClick={onClick}
+      type={onClick ? 'button' : undefined}
       className={cn(
         'inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full border',
         variants[variant],
@@ -32,7 +37,6 @@ export function Badge({ children, variant = 'primary', className, pulse = false 
       transition={{ duration: 0.3 }}
     >
       {children as any}
-    </motion.span>
+    </Component>
   );
 }
-
