@@ -20,7 +20,15 @@ const categoryLabels = {
 };
 
 export default async function FaqPage() {
-  const faqs = await getFaqs();
+  // Fetch FAQs with fallback to empty array if Strapi is unavailable
+  let faqs = [];
+  try {
+    faqs = await getFaqs();
+  } catch (error) {
+    console.error('Error fetching FAQs from Strapi:', error);
+    // Fallback to empty array - page will show "Nu ai găsit răspunsul?" section
+  }
+
   const footerScooters = await fetchScootersForFooter();
 
   // Group FAQs by category
