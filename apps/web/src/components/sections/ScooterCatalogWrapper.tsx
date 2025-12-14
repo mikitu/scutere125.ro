@@ -9,7 +9,7 @@ interface Category {
   name: string;
   slug: string;
   displayName: string;
-  icon: string;
+  icon?: string;
   order: number;
 }
 
