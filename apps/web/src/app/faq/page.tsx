@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { getFaqs } from '@/lib/strapi';
+import { getFaqs, StrapiFaq } from '@/lib/strapi';
 import { fetchScootersForFooter } from '@/data/scooters';
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ const categoryLabels = {
 
 export default async function FaqPage() {
   // Fetch FAQs with fallback to empty array if Strapi is unavailable
-  let faqs = [];
+  let faqs: StrapiFaq[] = [];
   try {
     faqs = await getFaqs();
   } catch (error) {
