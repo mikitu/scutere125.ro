@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { ScooterCatalog } from '@/components/sections/ScooterCatalog';
+import { ScooterCatalogWrapper } from '@/components/sections/ScooterCatalogWrapper';
 import { fetchScooters, fetchScootersForFooter } from '@/data/scooters';
 import { getCategories } from '@/lib/strapi';
 
@@ -40,7 +40,7 @@ export default async function ScuterePage() {
     <>
       <Header />
       <main className="pt-20">
-        <ScooterCatalog scooters={scooters} categories={categories} />
+        <ScooterCatalogWrapper scooters={scooters} categories={categories} />
       </main>
       <Footer scooters={footerScooters} />
     </>

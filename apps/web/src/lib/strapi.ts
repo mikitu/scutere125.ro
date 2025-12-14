@@ -142,7 +142,7 @@ export async function getScooters(): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
     '/scooters?populate[listingImage]=*&populate[mainImage]=*&populate[image]=*&populate[gallery]=*&populate[categories]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*',
     {
-      cache: 'no-store', // Disable cache during development
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
     }
   );
 
@@ -153,7 +153,7 @@ export async function getHomepageScooters(): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
     '/scooters?filters[showOnHomepage][$eq]=true&populate[listingImage]=*&populate[mainImage]=*&populate[image]=*&populate[gallery]=*&populate[categories]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*',
     {
-      cache: 'no-store', // Disable cache during development
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
     }
   );
 
@@ -164,7 +164,7 @@ export async function getScooterBySlug(slug: string): Promise<StrapiScooter | nu
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
     `/scooters?filters[slug][$eq]=${slug}&populate[listingImage]=*&populate[mainImage]=*&populate[image]=*&populate[gallery]=*&populate[categories]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*`,
     {
-      cache: 'no-store', // Disable cache during development
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
     }
   );
 
@@ -194,7 +194,7 @@ export async function getCategories(): Promise<StrapiCategory[]> {
   const response = await fetchAPI<StrapiResponse<StrapiCategory[]>>(
     '/categories?sort=order:asc',
     {
-      cache: 'no-store',
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
     }
   );
   return response.data;
@@ -205,7 +205,7 @@ export async function getFaqs(): Promise<StrapiFaq[]> {
   const response = await fetchAPI<StrapiResponse<StrapiFaq[]>>(
     '/faqs?sort=order:asc,id:asc',
     {
-      cache: 'no-store',
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
     }
   );
   return response.data;
