@@ -26,9 +26,15 @@ async function uploadImage(imagePath, scooterName) {
   
   try {
     const output = execSync(curlCommand, { encoding: 'utf-8' });
+    console.log(`   Response: ${output.substring(0, 200)}...`); // Debug
     const data = JSON.parse(output);
-    console.log(`✅ Uploaded: ${fileName} (ID: ${data[0]?.id})`);
-    return data[0];
+    if (data && data[0] && data[0].id) {
+      console.log(`✅ Uploaded: ${fileName} (ID: ${data[0].id})`);
+      return data[0];
+    } else {
+      console.error(`❌ Failed to upload ${fileName}: Invalid response`);
+      return null;
+    }
   } catch (error) {
     console.error(`❌ Failed to upload ${fileName}:`, error.message);
     return null;

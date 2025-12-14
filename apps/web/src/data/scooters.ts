@@ -29,8 +29,8 @@ export interface Scooter {
   };
   features: string[];
   category: 'urban' | 'sport' | 'premium'; // Deprecated: use categories instead
-  categories: string[]; // Array of category slugs from Strapi relation
-  manufacturer: 'Honda' | 'Yamaha' | 'Suzuki' | 'Sym' | 'Kymco' | 'Daytona' | 'Piaggio' | 'Aprilia' | 'Royal Enfield' | 'SWM';
+  categories?: string[]; // Array of category slugs from Strapi relation (optional for static data)
+  manufacturer?: 'Honda' | 'Yamaha' | 'Suzuki' | 'Sym' | 'Kymco' | 'Daytona' | 'Piaggio' | 'Aprilia' | 'Royal Enfield' | 'SWM';
   badge?: string;
   colors?: ScooterColor[];
 }

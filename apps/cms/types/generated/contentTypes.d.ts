@@ -362,6 +362,151 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    description: 'Scooter categories for filtering';
+    displayName: 'Category';
+    pluralName: 'categories';
+    singularName: 'category';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    displayName: Attribute.String & Attribute.Required;
+    icon: Attribute.String;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    order: Attribute.Integer & Attribute.DefaultTo<0>;
+    publishedAt: Attribute.DateTime;
+    scooters: Attribute.Relation<
+      'api::category.category',
+      'manyToMany',
+      'api::scooter.scooter'
+    >;
+    slug: Attribute.UID<'api::category.category', 'name'> & Attribute.Required;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiContactMessageContactMessage extends Schema.CollectionType {
+  collectionName: 'contact_messages';
+  info: {
+    description: 'Messages submitted through the contact form';
+    displayName: 'Contact Message';
+    pluralName: 'contact-messages';
+    singularName: 'contact-message';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::contact-message.contact-message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    email: Attribute.Email & Attribute.Required;
+    emailSent: Attribute.Boolean & Attribute.DefaultTo<false>;
+    emailSentAt: Attribute.DateTime;
+    ipAddress: Attribute.String;
+    message: Attribute.Text & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
+    phone: Attribute.String;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::contact-message.contact-message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    userAgent: Attribute.String;
+  };
+}
+
+export interface ApiFaqFaq extends Schema.CollectionType {
+  collectionName: 'faqs';
+  info: {
+    description: '\u00CEntreb\u0103ri frecvente';
+    displayName: 'FAQ';
+    pluralName: 'faqs';
+    singularName: 'faq';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    answer: Attribute.Text & Attribute.Required;
+    category: Attribute.Enumeration<
+      ['general', 'permis', 'achizitie', 'intretinere', 'tehnic']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'general'>;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::faq.faq', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    order: Attribute.Integer & Attribute.DefaultTo<0>;
+    publishedAt: Attribute.DateTime;
+    question: Attribute.String & Attribute.Required;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<'api::faq.faq', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiQuoteRequestQuoteRequest extends Schema.CollectionType {
+  collectionName: 'quote_requests';
+  info: {
+    description: 'Quote requests submitted through the request quote form';
+    displayName: 'Quote Request';
+    pluralName: 'quote-requests';
+    singularName: 'quote-request';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::quote-request.quote-request',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    email: Attribute.Email & Attribute.Required;
+    emailSent: Attribute.Boolean & Attribute.DefaultTo<false>;
+    emailSentAt: Attribute.DateTime;
+    ipAddress: Attribute.String;
+    message: Attribute.Text;
+    name: Attribute.String & Attribute.Required;
+    phone: Attribute.String & Attribute.Required;
+    scooter: Attribute.String;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::quote-request.quote-request',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    userAgent: Attribute.String;
+  };
+}
+
 export interface ApiScooterColorScooterColor extends Schema.CollectionType {
   collectionName: 'scooter_colors';
   info: {
@@ -416,8 +561,12 @@ export interface ApiScooterScooter extends Schema.CollectionType {
   };
   attributes: {
     badge: Attribute.String;
-    category: Attribute.Enumeration<['urban', 'sport', 'premium']> &
-      Attribute.Required;
+    categories: Attribute.Relation<
+      'api::scooter.scooter',
+      'manyToMany',
+      'api::category.category'
+    >;
+    category: Attribute.Enumeration<['urban', 'sport', 'premium']>;
     colors: Attribute.Relation<
       'api::scooter.scooter',
       'oneToMany',
@@ -438,6 +587,21 @@ export interface ApiScooterScooter extends Schema.CollectionType {
     image: Attribute.Media<'images'> & Attribute.Required;
     listingImage: Attribute.Media<'images'> & Attribute.Required;
     mainImage: Attribute.Media<'images'>;
+    manufacturer: Attribute.Enumeration<
+      [
+        'Honda',
+        'Yamaha',
+        'Suzuki',
+        'Sym',
+        'Kymco',
+        'Daytona',
+        'Piaggio',
+        'Aprilia',
+        'Royal Enfield',
+        'SWM'
+      ]
+    > &
+      Attribute.Required;
     name: Attribute.String & Attribute.Required;
     power: Attribute.String & Attribute.Required;
     price: Attribute.Decimal & Attribute.Required;
@@ -895,6 +1059,10 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::category.category': ApiCategoryCategory;
+      'api::contact-message.contact-message': ApiContactMessageContactMessage;
+      'api::faq.faq': ApiFaqFaq;
+      'api::quote-request.quote-request': ApiQuoteRequestQuoteRequest;
       'api::scooter-color.scooter-color': ApiScooterColorScooterColor;
       'api::scooter.scooter': ApiScooterScooter;
       'plugin::content-releases.release': PluginContentReleasesRelease;
