@@ -112,7 +112,7 @@ export default function DespreNoiPage() {
                   <div className="text-center">
                     <div className="text-7xl font-bold text-[#e63946] mb-4">B125</div>
                     <div className="text-2xl text-white font-semibold">Conform Legii</div>
-                    <div className="text-gray-400 mt-2">Scutere ieftine și legale</div>
+                    <div className="text-gray-400 mt-2">Scutere accesibile și legale</div>
                   </div>
                 </div>
               </motion.div>
