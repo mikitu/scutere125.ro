@@ -6,7 +6,7 @@ import { fetchScooters, fetchScootersForFooter } from '@/data/scooters';
 import { getCategories } from '@/lib/strapi';
 
 export const metadata: Metadata = {
-  title: 'Catalog Scutere 125cc | Scutere ieftine conform legii B125 | Scutere125.ro',
+  title: 'Catalog Scutere 125cc | Scutere de calitate și accesibile conform legii B125 | Scutere125.ro',
   description: 'Descoperă gama completă de scutere Honda 125cc. SH Mode, PCX 125, Forza 125 - toate conforme cu legea B125. Prețuri de la 2.990€.',
 };
 

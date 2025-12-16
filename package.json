@@ -2,7 +2,7 @@
   "name": "scutere125-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "Scutere125.ro - Pe drum, cu încredere | Scutere ieftine conform legii B125",
+  "description": "Scutere125.ro - Pe drum, cu încredere | Scutere de calitate și accesibile conform legii B125",
   "scripts": {
     "dev": "pnpm --parallel -r run dev",
     "dev:web": "pnpm --filter @scutere125/web dev",

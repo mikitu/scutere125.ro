@@ -89,7 +89,7 @@ export function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            Scutere ieftine conform legii B125
+            Scutere de calitate și accesibile conform legii B125
           </motion.div>
 
           {/* Main heading */}

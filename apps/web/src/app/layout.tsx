@@ -16,12 +16,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Scutere125.ro | Scutere ieftine conform legii B125 | Pe drum, cu încredere",
-  description: "Descoperă cele mai bune scutere 125cc pentru permis B125. Honda SH Mode, PCX 125, Forza 125 - scutere ieftine, fiabile și economice. Pe drum, cu încredere!",
-  keywords: "scutere 125cc, scutere ieftine, B125, permis B, Honda scutere, SH Mode 125, PCX 125, Forza 125, scutere Romania",
+  title: "Scutere125.ro | Scutere de calitate și accesibile conform legii B125 | Pe drum, cu încredere",
+  description: "Descoperă cele mai bune scutere 125cc pentru permis B125. Honda SH Mode, PCX 125, Forza 125 - scutere de calitate, fiabile și economice. Pe drum, cu încredere!",
+  keywords: "scutere 125cc, scutere accesibile, scutere calitate, B125, permis B, Honda scutere, SH Mode 125, PCX 125, Forza 125, scutere Romania",
   authors: [{ name: "Scutere125.ro" }],
   openGraph: {
-    title: "Scutere125.ro | Scutere ieftine conform legii B125",
+    title: "Scutere125.ro | Scutere de calitate și accesibile conform legii B125",
     description: "Descoperă cele mai bune scutere 125cc pentru permis B125. Pe drum, cu încredere!",
     url: "https://scutere125.ro",
     siteName: "Scutere125.ro",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Scutere125.ro | Scutere ieftine conform legii B125",
+    title: "Scutere125.ro | Scutere de calitate și accesibile conform legii B125",
     description: "Descoperă cele mai bune scutere 125cc pentru permis B125. Pe drum, cu încredere!",
   },
   robots: {
