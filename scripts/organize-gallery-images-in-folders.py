@@ -30,12 +30,12 @@ SCOOTER_TO_FOLDER = {
 # Image name patterns for each scooter
 IMAGE_PATTERNS = {
     'yamaha-delight-125': ['LTS125'],
-    'yamaha-nmax-125': [],  # No gallery images yet
-    'yamaha-nmax-125-tech-max': [],  # No gallery images yet
+    'yamaha-nmax-125': ['G125YM-EU-Icon', 'G125YM-EU-Crystal_Graphite'],
+    'yamaha-nmax-125-tech-max': ['G125YM-EU-Ceramic', 'G125YM-EU-Tech_MAX'],
     'yamaha-rayzr': ['LCG125'],
     'yamaha-tricity-125': ['LMW125'],
-    'yamaha-xmax-125': [],  # No gallery images yet
-    'yamaha-xmax-125-tech-max': [],  # No gallery images yet
+    'yamaha-xmax-125': ['XMAX125A-EU-Icon', 'XMAX125A-EU-Tech_Kamo'],
+    'yamaha-xmax-125-tech-max': ['XMAX125A-EU-Ceramic', 'XMAX125A-EU-Tech_MAX'],
 }
 
 
@@ -106,7 +106,7 @@ def move_images_to_folder(conn, scooter_slug, folder_id):
         FROM files f
         LEFT JOIN files_folder_links ffl ON f.id = ffl.file_id
         WHERE ({pattern_conditions})
-        AND (f.name LIKE '2024%' OR f.name LIKE '2025%')
+        AND (f.name LIKE '2024%' OR f.name LIKE '2025%' OR f.name LIKE '2026%')
     """
 
     cursor.execute(query)
