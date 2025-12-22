@@ -123,9 +123,25 @@ def move_images_to_folder(conn, scooter_slug, folder_id):
     folder_path = cursor.fetchone()[0]
 
     moved_count = 0
+    updated_count = 0
+
     for image_id, image_name, current_folder_id in images:
+        # Check if folder_path needs update
+        cursor.execute("""
+            SELECT folder_path FROM files WHERE id = %s
+        """, (image_id,))
+        current_folder_path = cursor.fetchone()[0]
+
         if current_folder_id == folder_id:
-            print(f"    ✓ Already in correct folder: {image_name}")
+            # Already in correct folder, but check folder_path
+            if current_folder_path != folder_path:
+                cursor.execute("""
+                    UPDATE files SET folder_path = %s WHERE id = %s
+                """, (folder_path, image_id))
+                updated_count += 1
+                print(f"    ✓ Updated folder_path: {image_name}")
+            else:
+                print(f"    ✓ Already in correct folder: {image_name}")
             continue
 
         # Delete old folder link
@@ -150,6 +166,10 @@ def move_images_to_folder(conn, scooter_slug, folder_id):
         print(f"    ✅ Moved: {image_name}")
 
     conn.commit()
+
+    if updated_count > 0:
+        print(f"  📝 Updated folder_path for {updated_count} images")
+
     return moved_count
 
 
