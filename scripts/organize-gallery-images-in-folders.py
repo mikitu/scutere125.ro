@@ -116,28 +116,39 @@ def move_images_to_folder(conn, scooter_slug, folder_id):
         print(f"  ⚠️  No images found for {scooter_slug}")
         return 0
     
+    # Get folder path
+    cursor.execute("""
+        SELECT path FROM upload_folders WHERE id = %s
+    """, (folder_id,))
+    folder_path = cursor.fetchone()[0]
+
     moved_count = 0
     for image_id, image_name, current_folder_id in images:
         if current_folder_id == folder_id:
             print(f"    ✓ Already in correct folder: {image_name}")
             continue
-        
+
         # Delete old folder link
         if current_folder_id:
             cursor.execute("""
                 DELETE FROM files_folder_links WHERE file_id = %s
             """, (image_id,))
-        
+
         # Create new folder link
         cursor.execute("""
             INSERT INTO files_folder_links (file_id, folder_id)
             VALUES (%s, %s)
             ON CONFLICT DO NOTHING
         """, (image_id, folder_id))
-        
+
+        # Update folder_path in files table
+        cursor.execute("""
+            UPDATE files SET folder_path = %s WHERE id = %s
+        """, (folder_path, image_id))
+
         moved_count += 1
         print(f"    ✅ Moved: {image_name}")
-    
+
     conn.commit()
     return moved_count
 
