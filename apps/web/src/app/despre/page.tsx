@@ -162,10 +162,10 @@ export default function DespreNoiPage() {
               className="bg-gradient-to-r from-[#e63946] to-[#f4a261] rounded-2xl p-12"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Pregătit să pornești la drum?
+                Gata de aventură?
               </h2>
               <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-                Contactează-ne astăzi și descoperă scuterul perfect pentru tine.
+                Hai să găsim împreună scuterul perfect pentru stilul tău de viață.
               </p>
               <a
                 href="/contact"

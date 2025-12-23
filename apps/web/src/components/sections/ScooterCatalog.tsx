@@ -410,7 +410,7 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
               </h3>
               <p className="text-lg text-white/60 mb-8">
                 {selectedManufacturer
-                  ? `Stai p'aci că băgăm marfa! Scuterele ${selectedManufacturer} vor fi disponibile în curând. Între timp, explorează celelalte modele.`
+                  ? `Pregătim gama ${selectedManufacturer}! Scuterele vor fi disponibile în curând. Între timp, explorează celelalte modele disponibile.`
                   : 'Nu am găsit scutere care să corespundă filtrelor tale. Încearcă să modifici criteriile de căutare.'
                 }
               </p>

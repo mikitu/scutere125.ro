@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getFaqs, StrapiFaq } from '@/lib/strapi';
@@ -79,9 +81,15 @@ export default async function FaqPage() {
                     </summary>
                     
                     <div className="px-6 pb-6 pt-2">
-                      <p className="text-white/80 leading-relaxed whitespace-pre-line">
-                        {faq.attributes.answer}
-                      </p>
+                      <div className="text-white/80 leading-relaxed prose prose-invert prose-sm max-w-none
+                        prose-p:my-2 prose-p:leading-relaxed
+                        prose-ul:my-2 prose-ul:list-disc prose-ul:pl-6
+                        prose-li:my-1
+                        prose-strong:text-white prose-strong:font-semibold">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {faq.attributes.answer}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </details>
                 ))}
