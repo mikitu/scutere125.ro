@@ -11,7 +11,7 @@ import { useQuoteModal } from '@/contexts/QuoteModalContext';
 const features = [
   { icon: Shield, label: 'Conform B125', desc: 'Legal cu permis auto' },
   { icon: Fuel, label: 'Super economic', desc: '2L/100km' },
-  { icon: Zap, label: 'Fiabil', desc: 'Calitate Honda' },
+  { icon: Zap, label: 'Fiabil', desc: 'Calitate premium' },
 ];
 
 export function Hero() {
@@ -46,7 +46,7 @@ export function Hero() {
       <div className="absolute inset-0">
         <Image
           src="/images/hero-1.jpg"
-          alt="Scuter Honda pe drum"
+          alt="Scuter 125cc pe drum"
           fill
           className="object-cover"
           priority

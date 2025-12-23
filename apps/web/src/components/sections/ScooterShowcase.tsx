@@ -36,7 +36,7 @@ export function ScooterShowcase({ scooters }: ScooterShowcaseProps) {
             Alege scuterul <span className="gradient-text">perfect</span>
           </h2>
           <p className="text-xl text-white/60 max-w-2xl mx-auto">
-            Trei modele Honda de excepție, toate conforme cu legea B125. 
+            Modele de excepție, toate conforme cu legea B125.
             Găsește-l pe cel care ți se potrivește.
           </p>
         </motion.div>

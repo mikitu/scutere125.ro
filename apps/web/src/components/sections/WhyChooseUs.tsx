@@ -13,7 +13,7 @@ const reasons = [
   {
     icon: Wallet,
     title: 'Prețuri accesibile',
-    description: 'Cele mai bune prețuri din România pentru scutere Honda 125cc de calitate.',
+    description: 'Cele mai bune prețuri din România pentru scutere 125cc de calitate.',
   },
   {
     icon: Wrench,
