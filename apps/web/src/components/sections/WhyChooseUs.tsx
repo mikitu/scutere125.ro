@@ -18,12 +18,12 @@ const reasons = [
   {
     icon: Wrench,
     title: 'Service autorizat',
-    description: 'Beneficiezi de service Honda autorizat și piese originale garantate.',
+    description: 'Beneficiezi de service autorizat și piese originale garantate.',
   },
   {
     icon: Award,
     title: 'Garanție completă',
-    description: 'Garanție producător Honda și suport tehnic pe toată durata garanției.',
+    description: 'Garanție producător și suport tehnic pe toată durata garanției.',
   },
   {
     icon: Clock,
