@@ -94,10 +94,24 @@ function ScooterGridCard({ scooter, index }: { scooter: Scooter; index: number }
           {/* Price and CTA */}
           <div className="mt-auto flex items-center justify-between">
             <div>
-              <p className="text-xs text-white/40">de la</p>
-              <p className="text-2xl font-bold text-white">
-                {formatPrice(scooter.price)}
-              </p>
+              {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
+                <>
+                  <p className="text-xs text-white/40 line-through">{formatPrice(scooter.standardPrice)}</p>
+                  <p className="text-2xl font-bold text-primary">
+                    {formatPrice(scooter.price)}
+                  </p>
+                  <p className="text-xs text-accent font-medium">
+                    Economisești {formatPrice(scooter.standardPrice - scooter.price)}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs text-white/40">de la</p>
+                  <p className="text-2xl font-bold text-white">
+                    {formatPrice(scooter.price)}
+                  </p>
+                </>
+              )}
             </div>
             <Link href={`/scutere-125/${scooter.slug}`}>
               <Button variant="primary" size="sm">
@@ -208,13 +222,32 @@ function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
             {/* Price and CTA */}
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-white/40">Preț de la</p>
-                <p className="text-3xl font-bold text-white">
-                  {formatPrice(scooter.price)}
-                  {scooter.priceMax && (
-                    <span className="text-lg text-white/40 font-normal"> - {formatPrice(scooter.priceMax)}</span>
-                  )}
-                </p>
+                {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
+                  <>
+                    <p className="text-sm text-white/40">
+                      Preț standard: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
+                    </p>
+                    <p className="text-3xl font-bold text-primary">
+                      {formatPrice(scooter.price)}
+                      {scooter.priceMax && (
+                        <span className="text-lg text-primary/60 font-normal"> - {formatPrice(scooter.priceMax)}</span>
+                      )}
+                    </p>
+                    <p className="text-sm text-accent font-medium mt-1">
+                      Economisești {formatPrice(scooter.standardPrice - scooter.price)} ({Math.round((scooter.standardPrice - scooter.price) / scooter.standardPrice * 100)}% reducere)
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-white/40">Preț de la</p>
+                    <p className="text-3xl font-bold text-white">
+                      {formatPrice(scooter.price)}
+                      {scooter.priceMax && (
+                        <span className="text-lg text-white/40 font-normal"> - {formatPrice(scooter.priceMax)}</span>
+                      )}
+                    </p>
+                  </>
+                )}
               </div>
               <Link href={`/scutere-125/${scooter.slug}`}>
                 <Button variant="primary" size="lg">

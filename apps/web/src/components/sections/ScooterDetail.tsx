@@ -103,17 +103,45 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
 
             {/* Price */}
             <div className="mb-8">
-              <p className="text-sm text-white/40 mb-1">Preț de la</p>
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-white">{formatPrice(scooter.price)}</span>
-                {scooter.priceMax && (
-                  <span className="text-xl text-white/40">- {formatPrice(scooter.priceMax)}</span>
-                )}
-              </div>
-              <p className="text-sm text-green-400 mt-2 flex items-center gap-1">
-                <Check className="w-4 h-4" />
-                Conform legii B125 - conduci legal cu permis auto
-              </p>
+              {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
+                <>
+                  <p className="text-sm text-white/40 mb-1">
+                    Preț standard: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
+                  </p>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="text-4xl font-bold text-primary">{formatPrice(scooter.price)}</span>
+                    {scooter.priceMax && (
+                      <span className="text-xl text-primary/60">- {formatPrice(scooter.priceMax)}</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-4 mb-2">
+                    <p className="text-base text-accent font-semibold">
+                      Economisești {formatPrice(scooter.standardPrice - scooter.price)}
+                    </p>
+                    <Badge variant="accent">
+                      -{Math.round((scooter.standardPrice - scooter.price) / scooter.standardPrice * 100)}% reducere
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-green-400 flex items-center gap-1">
+                    <Check className="w-4 h-4" />
+                    Conform legii B125 - conduci legal cu permis auto
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm text-white/40 mb-1">Preț de la</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-bold text-white">{formatPrice(scooter.price)}</span>
+                    {scooter.priceMax && (
+                      <span className="text-xl text-white/40">- {formatPrice(scooter.priceMax)}</span>
+                    )}
+                  </div>
+                  <p className="text-sm text-green-400 mt-2 flex items-center gap-1">
+                    <Check className="w-4 h-4" />
+                    Conform legii B125 - conduci legal cu permis auto
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Color selector */}

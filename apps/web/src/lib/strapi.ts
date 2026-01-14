@@ -57,6 +57,7 @@ export interface StrapiScooter {
     description: string;
     price: number;
     priceMax?: number;
+    standardPrice?: number;
     listingImage: StrapiMedia;
     mainImage: StrapiMedia;
     image: StrapiMedia;

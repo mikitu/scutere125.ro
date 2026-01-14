@@ -16,6 +16,7 @@ export interface Scooter {
   description: string;
   price: number;
   priceMax?: number;
+  standardPrice?: number;
   listingImage: string; // Imaginea pentru catalog/listă
   image: string; // Imaginea principală pentru pagina de detalii
   gallery: string[];

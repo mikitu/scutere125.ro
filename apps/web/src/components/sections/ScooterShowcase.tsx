@@ -107,10 +107,24 @@ export function ScooterShowcase({ scooters }: ScooterShowcaseProps) {
                   {/* Price and CTA */}
                   <div className="mt-auto flex items-center justify-between">
                     <div>
-                      <p className="text-xs text-white/40">de la</p>
-                      <p className="text-2xl font-bold text-white">
-                        {formatPrice(scooter.price)}
-                      </p>
+                      {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
+                        <>
+                          <p className="text-xs text-white/40 line-through">{formatPrice(scooter.standardPrice)}</p>
+                          <p className="text-2xl font-bold text-primary">
+                            {formatPrice(scooter.price)}
+                          </p>
+                          <p className="text-xs text-accent font-medium">
+                            -{formatPrice(scooter.standardPrice - scooter.price)}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-xs text-white/40">de la</p>
+                          <p className="text-2xl font-bold text-white">
+                            {formatPrice(scooter.price)}
+                          </p>
+                        </>
+                      )}
                     </div>
                     <Link href={`/scutere-125/${scooter.slug}`}>
                       <Button variant="primary" size="sm">

@@ -47,6 +47,7 @@ export function adaptStrapiScooter(strapiScooter: StrapiScooter): Scooter {
     description: attributes.description,
     price: Number(attributes.price),
     priceMax: attributes.priceMax ? Number(attributes.priceMax) : undefined,
+    standardPrice: attributes.standardPrice ? Number(attributes.standardPrice) : undefined,
     listingImage,
     image: mainImage,
     gallery: gallery.length > 0 ? gallery : [mainImage],
