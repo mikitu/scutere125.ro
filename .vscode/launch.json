@@ -2,6 +2,71 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Expo: Start",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["start"],
+      "cwd": "${workspaceFolder}/apps/mobile-app",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+            "name": "Prebuild",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "expo",
+                "prebuild"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
+        },
+    {
+      "name": "Expo: Run iOS Simulator",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["ios"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/apps/mobile-app"
+    },
+    {
+      "name": "Expo: Run iOS Device",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "run:ios", "--device"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/apps/mobile-app"
+    },
+    {
+      "name": "Expo: Run Android Emulator",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["android"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/apps/mobile-app"
+    },
+    {
+      "name": "Expo: Run Android Device",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "run:android", "--device"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/apps/mobile-app"
+    },
+    {
       "name": "Next.js: Debug Server",
       "type": "node",
       "request": "launch",
@@ -36,6 +101,20 @@
         "hidden": false,
         "group": "development",
         "order": 1
+      }
+    },
+    {
+      "name": "Full Stack + Mobile: Debug All",
+      "configurations": [
+        "Next.js: Debug Server",
+        "Strapi: Debug Server",
+        "Expo: Start"
+      ],
+      "stopAll": true,
+      "presentation": {
+        "hidden": false,
+        "group": "development",
+        "order": 2
       }
     }
   ]

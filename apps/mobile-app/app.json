@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Scutere125",
+    "slug": "scutere125",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0a0a"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ro.scutere125.app",
+      "appleTeamId": "FH7KW33Z99"
+    },
+    "android": {
+      "package": "ro.scutere125.app"
+    },
+    "web": {},
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "scutere125"
+  }
+}
