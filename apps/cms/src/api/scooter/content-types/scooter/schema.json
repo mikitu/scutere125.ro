@@ -36,6 +36,9 @@
     "priceMax": {
       "type": "decimal"
     },
+    "standardPrice": {
+      "type": "decimal"
+    },
     "listingImage": {
       "type": "media",
       "multiple": false,
