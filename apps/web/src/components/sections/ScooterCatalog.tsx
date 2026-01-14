@@ -227,18 +227,21 @@ function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
               <div>
                 {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
                   <>
-                    <p className="text-sm text-white/40">
+                    <p className="text-sm text-white/40 mb-1">
                       Preț: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
                     </p>
-                    <div className="flex items-baseline gap-2 mt-1">
-                      <span className="text-sm text-white/60">Prețul nostru:</span>
-                      <p className="text-3xl font-bold text-primary">
-                        {formatPrice(scooter.price)}
-                      </p>
-                    </div>
-                    <p className="text-sm text-accent font-medium mt-1">
-                      Economisești {formatPrice(scooter.standardPrice - scooter.price)} ({Math.round((scooter.standardPrice - scooter.price) / scooter.standardPrice * 100)}% reducere)
+                    <p className="text-sm text-white/60 mb-0.5">Prețul nostru:</p>
+                    <p className="text-3xl font-bold text-primary mb-1">
+                      {formatPrice(scooter.price)}
                     </p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="text-sm text-accent font-medium">
+                        Economisești {formatPrice(scooter.standardPrice - scooter.price)}
+                      </p>
+                      <Badge variant="accent" className="whitespace-nowrap px-6">
+                        -{Math.round((scooter.standardPrice - scooter.price) / scooter.standardPrice * 100)}% reducere
+                      </Badge>
+                    </div>
                   </>
                 ) : (
                   <>
@@ -254,7 +257,7 @@ function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
               </div>
               <Link href={`/scutere-125/${scooter.slug}`}>
                 <Button variant="primary" size="lg">
-                  Vezi detalii <ArrowRight className="w-5 h-5" />
+                  Detalii <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
             </div>
