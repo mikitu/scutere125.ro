@@ -104,7 +104,7 @@ function ScooterGridCard({ scooter, index }: { scooter: Scooter; index: number }
                     {formatPrice(scooter.price)}
                   </p>
                   <p className="text-xs text-accent font-medium">
-                    Economisești {formatPrice(scooter.standardPrice - scooter.price)}
+                    -{formatPrice(scooter.standardPrice - scooter.price)}
                   </p>
                 </>
               ) : (
