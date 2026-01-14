@@ -112,10 +112,12 @@ export function ScooterShowcase({ scooters }: ScooterShowcaseProps) {
                           <p className="text-xs text-white/40">
                             Preț: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
                           </p>
-                          <p className="text-xs text-white/60 mt-1">Prețul nostru:</p>
-                          <p className="text-2xl font-bold text-primary">
-                            {formatPrice(scooter.price)}
-                          </p>
+                          <div>
+                            <p className="text-xs text-white/60">Prețul nostru:</p>
+                            <p className="text-2xl font-bold text-primary leading-tight">
+                              {formatPrice(scooter.price)}
+                            </p>
+                          </div>
                           <p className="text-xs text-accent font-medium">
                             -{formatPrice(scooter.standardPrice - scooter.price)}
                           </p>
