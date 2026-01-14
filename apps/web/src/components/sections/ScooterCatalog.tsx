@@ -96,15 +96,13 @@ function ScooterGridCard({ scooter, index }: { scooter: Scooter; index: number }
             <div>
               {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
                 <>
-                  <p className="text-xs text-white/40">
+                  <p className="text-xs text-white/40 mb-1">
                     Preț: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
                   </p>
-                  <div>
-                    <p className="text-xs text-white/60">Prețul nostru:</p>
-                    <p className="text-2xl font-bold text-primary leading-tight">
-                      {formatPrice(scooter.price)}
-                    </p>
-                  </div>
+                  <p className="text-xs text-white/60 mb-0.5">Prețul nostru:</p>
+                  <p className="text-2xl font-bold text-primary mb-1">
+                    {formatPrice(scooter.price)}
+                  </p>
                   <p className="text-xs text-accent font-medium">
                     Economisești {formatPrice(scooter.standardPrice - scooter.price)}
                   </p>
