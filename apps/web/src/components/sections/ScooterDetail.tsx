@@ -108,11 +108,8 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
                   <p className="text-sm text-white/40 mb-1">
                     Preț standard: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
                   </p>
-                  <div className="flex items-baseline gap-3 mb-2">
+                  <div className="mb-2">
                     <span className="text-4xl font-bold text-primary">{formatPrice(scooter.price)}</span>
-                    {scooter.priceMax && (
-                      <span className="text-xl text-primary/60">- {formatPrice(scooter.priceMax)}</span>
-                    )}
                   </div>
                   <div className="flex items-center gap-4 mb-2">
                     <p className="text-base text-accent font-semibold">
