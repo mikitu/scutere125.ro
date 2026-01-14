@@ -610,6 +610,7 @@ export interface ApiScooterScooter extends Schema.CollectionType {
     seatHeight: Attribute.String & Attribute.Required;
     showOnHomepage: Attribute.Boolean & Attribute.DefaultTo<false>;
     slug: Attribute.UID<'api::scooter.scooter', 'name'> & Attribute.Required;
+    standardPrice: Attribute.Decimal;
     storage: Attribute.String & Attribute.Required;
     tagline: Attribute.String & Attribute.Required;
     updatedAt: Attribute.DateTime;
