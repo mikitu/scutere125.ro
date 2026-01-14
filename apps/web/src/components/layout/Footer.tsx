@@ -37,9 +37,9 @@ export function Footer({ scooters = [] }: FooterProps) {
   return (
     <footer className="bg-linear-to-b from-background to-black border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-4 lg:col-span-1">
             <Link href="/" className="inline-block">
               <span className="text-2xl font-bold">
                 <span className="text-primary">Scutere</span>
@@ -60,75 +60,60 @@ export function Footer({ scooters = [] }: FooterProps) {
             </div>
           </div>
 
-          {/* Producători - Column 1 */}
-          <div>
+          {/* Producători - 2 columns on mobile, 2 separate columns on desktop */}
+          <div className="lg:col-span-2">
             <h4 className="text-white font-semibold mb-4">Producători</h4>
-            <ul className="space-y-2">
-              {manufacturers.slice(0, 4).map((manufacturer) => (
-                <li key={manufacturer.slug}>
-                  <Link
-                    href={`/scutere-125?manufacturer=${manufacturer.slug}`}
-                    className="text-white/60 hover:text-white text-sm transition-colors"
-                  >
-                    {manufacturer.name}
-                  </Link>
-                </li>
+            <div className="grid grid-cols-2 gap-x-8 lg:gap-x-12 gap-y-2">
+              {manufacturers.map((manufacturer) => (
+                <Link
+                  key={manufacturer.slug}
+                  href={`/scutere-125?manufacturer=${manufacturer.slug}`}
+                  className="text-white/60 hover:text-white text-sm transition-colors"
+                >
+                  {manufacturer.name}
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Producători - Column 2 */}
-          <div>
-            <h4 className="text-white font-semibold mb-4 invisible">Producători</h4>
-            <ul className="space-y-2">
-              {manufacturers.slice(4, 8).map((manufacturer) => (
-                <li key={manufacturer.slug}>
-                  <Link
-                    href={`/scutere-125?manufacturer=${manufacturer.slug}`}
-                    className="text-white/60 hover:text-white text-sm transition-colors"
-                  >
-                    {manufacturer.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Informații + Contact - 2 columns on mobile, 2 separate columns on desktop */}
+          <div className="grid grid-cols-2 gap-8 lg:col-span-2">
+            {/* Informații */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Informații</h4>
+              <ul className="space-y-2">
+                {footerLinks.informatii.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Informații */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Informații</h4>
-            <ul className="space-y-2">
-              {footerLinks.informatii.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors">
-                    {link.label}
-                  </Link>
+            {/* Contact */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Contact</h4>
+              <ul className="space-y-3">
+                <li>
+                  <a href="tel:+40772129775" className="flex items-center gap-2 lg:gap-3 text-white/60 text-sm hover:text-white transition-colors">
+                    <Phone className="w-4 h-4 text-primary shrink-0" />
+                    <span>+40 772 129 775</span>
+                  </a>
                 </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Contact</h4>
-            <ul className="space-y-3">
-              <li>
-                <a href="tel:+40772129775" className="flex items-center gap-3 text-white/60 text-sm hover:text-white transition-colors">
-                  <Phone className="w-4 h-4 text-primary" />
-                  <span>+40 772 129 775</span>
-                </a>
-              </li>
-              <li>
-                <a href="mailto:contact@scutere125.ro" className="flex items-center gap-3 text-white/60 text-sm hover:text-white transition-colors">
-                  <Mail className="w-4 h-4 text-primary" />
-                  <span>contact@scutere125.ro</span>
-                </a>
-              </li>
-              <li className="flex items-start gap-3 text-white/60 text-sm">
-                <MapPin className="w-4 h-4 text-primary mt-0.5" />
-                <span>Str. Selimbar nr.10, Brebu Mânăstirei, Prahova</span>
-              </li>
-            </ul>
+                <li>
+                  <a href="mailto:contact@scutere125.ro" className="flex items-center gap-2 lg:gap-3 text-white/60 text-sm hover:text-white transition-colors">
+                    <Mail className="w-4 h-4 text-primary shrink-0" />
+                    <span className="break-all lg:break-normal">contact@scutere125.ro</span>
+                  </a>
+                </li>
+                <li className="flex items-start gap-2 lg:gap-3 text-white/60 text-sm">
+                  <MapPin className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                  <span>Str. Selimbar nr.10, Brebu Mânăstirei, Prahova</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 

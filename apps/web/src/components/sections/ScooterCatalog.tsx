@@ -274,18 +274,24 @@ export function ScooterCatalog({ scooters, categories }: ScooterCatalogProps) {
   const [selectedManufacturer, setSelectedManufacturer] = useState<string | null>(null);
 
   // Read view mode from localStorage on mount, default to 'list'
-  const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('scooter-catalog-view-mode');
-      return (saved === 'grid' || saved === 'list') ? saved : 'list';
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [isClient, setIsClient] = useState(false);
+
+  // Hydration-safe: read from localStorage only on client
+  useEffect(() => {
+    setIsClient(true);
+    const saved = localStorage.getItem('scooter-catalog-view-mode');
+    if (saved === 'grid' || saved === 'list') {
+      setViewMode(saved);
     }
-    return 'list';
-  });
+  }, []);
 
   // Save view mode to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('scooter-catalog-view-mode', viewMode);
-  }, [viewMode]);
+    if (isClient) {
+      localStorage.setItem('scooter-catalog-view-mode', viewMode);
+    }
+  }, [viewMode, isClient]);
 
   // Read manufacturer from URL on mount
   useEffect(() => {
