@@ -96,7 +96,10 @@ function ScooterGridCard({ scooter, index }: { scooter: Scooter; index: number }
             <div>
               {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
                 <>
-                  <p className="text-xs text-white/40 line-through">{formatPrice(scooter.standardPrice)}</p>
+                  <p className="text-xs text-white/40">
+                    Preț: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
+                  </p>
+                  <p className="text-xs text-white/60 mt-1">Prețul nostru:</p>
                   <p className="text-2xl font-bold text-primary">
                     {formatPrice(scooter.price)}
                   </p>
@@ -225,14 +228,14 @@ function ScooterCard({ scooter, index }: { scooter: Scooter; index: number }) {
                 {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
                   <>
                     <p className="text-sm text-white/40">
-                      Preț standard: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
+                      Preț: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
                     </p>
-                    <p className="text-3xl font-bold text-primary">
-                      {formatPrice(scooter.price)}
-                      {scooter.priceMax && (
-                        <span className="text-lg text-primary/60 font-normal"> - {formatPrice(scooter.priceMax)}</span>
-                      )}
-                    </p>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <span className="text-sm text-white/60">Prețul nostru:</span>
+                      <p className="text-3xl font-bold text-primary">
+                        {formatPrice(scooter.price)}
+                      </p>
+                    </div>
                     <p className="text-sm text-accent font-medium mt-1">
                       Economisești {formatPrice(scooter.standardPrice - scooter.price)} ({Math.round((scooter.standardPrice - scooter.price) / scooter.standardPrice * 100)}% reducere)
                     </p>

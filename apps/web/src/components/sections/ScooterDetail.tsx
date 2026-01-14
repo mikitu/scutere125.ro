@@ -106,9 +106,10 @@ export function ScooterDetail({ scooter }: ScooterDetailProps) {
               {scooter.standardPrice && scooter.standardPrice > scooter.price ? (
                 <>
                   <p className="text-sm text-white/40 mb-1">
-                    Preț standard: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
+                    Preț: <span className="line-through">{formatPrice(scooter.standardPrice)}</span>
                   </p>
-                  <div className="mb-2">
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="text-sm text-white/60">Prețul nostru:</span>
                     <span className="text-4xl font-bold text-primary">{formatPrice(scooter.price)}</span>
                   </div>
                   <div className="flex items-center gap-4 mb-2">
