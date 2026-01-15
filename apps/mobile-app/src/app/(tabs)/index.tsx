@@ -124,9 +124,6 @@ export default function HomeScreen() {
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Populare</Text>
-                <TouchableOpacity onPress={() => handleSeeAll('featured')}>
-                  <Text style={styles.seeAllButton}>Vezi toate</Text>
-                </TouchableOpacity>
               </View>
               <ScrollView
                 horizontal

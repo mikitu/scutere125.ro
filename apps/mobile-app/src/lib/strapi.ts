@@ -24,6 +24,18 @@ interface StrapiCategory {
   };
 }
 
+export interface StrapiScooterColor {
+  id: number;
+  attributes: {
+    name: string;
+    code: string;
+    hex?: string;
+    listingImage: StrapiMedia;
+    image: StrapiMedia;
+    gallery: StrapiMedia;
+  };
+}
+
 export interface StrapiScooter {
   id: number;
   attributes: {
@@ -45,6 +57,9 @@ export interface StrapiScooter {
     features: string[];
     categories?: {
       data: StrapiCategory[];
+    };
+    colors?: {
+      data: StrapiScooterColor[];
     };
     manufacturer: string;
     badge?: string;
@@ -105,9 +120,9 @@ export async function getLatestScooters(): Promise<StrapiScooter[]> {
 }
 
 // Get all scooters
-export async function getAllScooters(): Promise<StrapiScooter[]> {
+export async function getAllScooters(limit: number = 100): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    '/scooters?populate[listingImage]=*&populate[categories]=*&sort[0]=createdAt:desc'
+    `/scooters?populate[listingImage]=*&populate[categories]=*&sort[0]=createdAt:desc&pagination[limit]=${limit}`
   );
   return response.data;
 }
@@ -115,7 +130,7 @@ export async function getAllScooters(): Promise<StrapiScooter[]> {
 // Get scooter by slug
 export async function getScooterBySlug(slug: string): Promise<StrapiScooter | null> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    `/scooters?filters[slug][$eq]=${slug}&populate[listingImage]=*&populate[image]=*&populate[categories]=*`
+    `/scooters?filters[slug][$eq]=${slug}&populate[listingImage]=*&populate[image]=*&populate[gallery]=*&populate[categories]=*&populate[colors][populate][listingImage]=*&populate[colors][populate][image]=*&populate[colors][populate][gallery]=*`
   );
   return response.data[0] || null;
 }
@@ -130,5 +145,19 @@ export function getImageUrl(media: StrapiMedia): string | null {
   const url = image.attributes.url;
   // If URL is relative, prepend STRAPI_URL
   return url.startsWith('http') ? url : `${STRAPI_URL}${url}`;
+}
+
+// Helper to get multiple image URLs (for gallery)
+export function getImageUrls(media: StrapiMedia): string[] {
+  if (!media?.data) return [];
+
+  const images = Array.isArray(media.data) ? media.data : [media.data];
+
+  return images
+    .filter(img => img && img.attributes?.url)
+    .map(img => {
+      const url = img.attributes.url;
+      return url.startsWith('http') ? url : `${STRAPI_URL}${url}`;
+    });
 }
 

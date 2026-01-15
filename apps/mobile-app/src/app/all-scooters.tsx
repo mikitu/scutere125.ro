@@ -41,7 +41,7 @@ export default function AllScootersScreen() {
       } else if (section === 'latest') {
         data = await getLatestScooters();
       } else {
-        data = await getAllScooters();
+        data = await getAllScooters(20);
       }
       setScooters(adaptStrapiScooters(data));
     } catch (error) {
