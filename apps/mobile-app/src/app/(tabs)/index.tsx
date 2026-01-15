@@ -13,6 +13,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
+import { useRouter } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { colors, spacing, typography, borderRadius, shadows } from '../../constants/theme';
 import { getFeaturedScooters, getLatestScooters } from '../../lib/strapi';
 import { adaptStrapiScooters, Scooter } from '../../lib/scooter-adapter';
@@ -34,6 +36,7 @@ function HelmetIcon({ size = 40 }: { size?: number }) {
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [featuredScooters, setFeaturedScooters] = useState<Scooter[]>([]);
   const [latestScooters, setLatestScooters] = useState<Scooter[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,6 +63,7 @@ export default function HomeScreen() {
   };
 
   const toggleFavorite = (id: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setFavorites(prev => {
       const newFavorites = new Set(prev);
       if (newFavorites.has(id)) {
@@ -69,6 +73,16 @@ export default function HomeScreen() {
       }
       return newFavorites;
     });
+  };
+
+  const handleScooterPress = (scooter: Scooter) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    router.push(`/scooter/${scooter.slug}`);
+  };
+
+  const handleSeeAll = (section: 'featured' | 'latest') => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push(`/all-scooters?section=${section}`);
   };
 
   return (
@@ -110,7 +124,7 @@ export default function HomeScreen() {
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Populare</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handleSeeAll('featured')}>
                   <Text style={styles.seeAllButton}>Vezi toate</Text>
                 </TouchableOpacity>
               </View>
@@ -128,6 +142,7 @@ export default function HomeScreen() {
                     index={index}
                     isFavorite={favorites.has(scooter.id)}
                     onToggleFavorite={() => toggleFavorite(scooter.id)}
+                    onPress={() => handleScooterPress(scooter)}
                   />
                 ))}
               </ScrollView>
@@ -137,7 +152,7 @@ export default function HomeScreen() {
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Noutăți</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handleSeeAll('latest')}>
                   <Text style={styles.seeAllButton}>Vezi toate</Text>
                 </TouchableOpacity>
               </View>
@@ -155,6 +170,7 @@ export default function HomeScreen() {
                     index={index}
                     isFavorite={favorites.has(scooter.id)}
                     onToggleFavorite={() => toggleFavorite(scooter.id)}
+                    onPress={() => handleScooterPress(scooter)}
                     isNew
                   />
                 ))}
@@ -172,10 +188,11 @@ interface ScooterCardProps {
   index: number;
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  onPress: () => void;
   isNew?: boolean;
 }
 
-function ScooterCard({ scooter, index, isFavorite, onToggleFavorite, isNew = false }: ScooterCardProps) {
+function ScooterCard({ scooter, index, isFavorite, onToggleFavorite, onPress, isNew = false }: ScooterCardProps) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
@@ -199,6 +216,7 @@ function ScooterCard({ scooter, index, isFavorite, onToggleFavorite, isNew = fal
       activeOpacity={1}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
+      onPress={onPress}
       style={[styles.cardWrapper, index === 0 && styles.firstCard]}
     >
       <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>

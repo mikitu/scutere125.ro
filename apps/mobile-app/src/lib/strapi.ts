@@ -112,13 +112,21 @@ export async function getAllScooters(): Promise<StrapiScooter[]> {
   return response.data;
 }
 
+// Get scooter by slug
+export async function getScooterBySlug(slug: string): Promise<StrapiScooter | null> {
+  const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
+    `/scooters?filters[slug][$eq]=${slug}&populate[listingImage]=*&populate[image]=*&populate[categories]=*`
+  );
+  return response.data[0] || null;
+}
+
 // Helper to get full image URL
 export function getImageUrl(media: StrapiMedia): string | null {
   if (!media?.data) return null;
-  
+
   const image = Array.isArray(media.data) ? media.data[0] : media.data;
   if (!image) return null;
-  
+
   const url = image.attributes.url;
   // If URL is relative, prepend STRAPI_URL
   return url.startsWith('http') ? url : `${STRAPI_URL}${url}`;
