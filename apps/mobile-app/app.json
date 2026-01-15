@@ -5,7 +5,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
+    "icon": "./assets/casca.png",
     "splash": {
+      "image": "./assets/casca.png",
       "resizeMode": "contain",
       "backgroundColor": "#0a0a0a"
     },
@@ -15,14 +17,23 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ro.scutere125.app",
-      "appleTeamId": "FH7KW33Z99"
+      "appleTeamId": "FH7KW33Z99",
+      "icon": "./assets/casca.png"
     },
     "android": {
-      "package": "ro.scutere125.app"
+      "package": "ro.scutere125.app",
+      "icon": "./assets/casca.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/casca.png",
+        "backgroundColor": "#0a0a0a"
+      }
     },
-    "web": {},
+    "web": {
+      "favicon": "./assets/casca.png"
+    },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-asset"
     ],
     "scheme": "scutere125"
   }

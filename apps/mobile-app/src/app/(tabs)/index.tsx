@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,73 +7,69 @@ import {
   Animated,
   Dimensions,
   TouchableOpacity,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
-import Svg, { Ellipse, Path, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import { colors, spacing, typography, borderRadius, shadows } from '../../constants/theme';
+import { getFeaturedScooters, getLatestScooters } from '../../lib/strapi';
+import { adaptStrapiScooters, Scooter } from '../../lib/scooter-adapter';
 
 const { width } = Dimensions.get('window');
-const CARD_WIDTH = width * 0.7;
+const CARD_WIDTH = (width - spacing.lg * 3) / 2; // 2 cards visible
 const CARD_SPACING = spacing.lg;
-
-// Mock data - replace with real data later
-const popularScooters = [
-  { id: 1, name: 'Honda PCX 125', category: 'Urban', cc: '125cc', price: '€3,499', image: '🏍️', rating: 4.8 },
-  { id: 2, name: 'Yamaha NMAX 125', category: 'Urban', cc: '125cc', price: '€3,200', image: '🏍️', rating: 4.7 },
-  { id: 3, name: 'Piaggio Medley 125', category: 'Urban', cc: '125cc', price: '€3,799', image: '🏍️', rating: 4.6 },
-];
-
-const newScooters = [
-  { id: 4, name: 'Keeway Vieste 125', category: 'Sport', cc: '125cc', price: '€3,150', image: '🏍️', badge: 'Nou' },
-  { id: 5, name: 'Siliv ViăiCity Motard', category: 'Smart', cc: '125cc', price: '€3,150', image: '🏍️', badge: 'Nou' },
-  { id: 6, name: 'Aprilia SR GT 125', category: 'Sport', cc: '125cc', price: '€4,299', image: '🏍️', badge: 'Nou' },
-];
 
 // Helmet Icon Component
 function HelmetIcon({ size = 40 }: { size?: number }) {
   return (
-    <Svg width={size} height={size} viewBox="0 0 120 120">
-      <Defs>
-        <SvgLinearGradient id="helmet-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.3" />
-          <Stop offset="100%" stopColor="#CCCCCC" stopOpacity="0.1" />
-        </SvgLinearGradient>
-      </Defs>
-
-      {/* Helmet body */}
-      <Ellipse cx="60" cy="65" rx="35" ry="40" fill="#E8E8E8" />
-      <Ellipse cx="60" cy="65" rx="35" ry="40" fill="url(#helmet-gradient)" />
-
-      {/* Red top stripe */}
-      <Path d="M 30 45 Q 60 35 90 45 Q 90 50 60 42 Q 30 50 30 45 Z" fill="#E63946" />
-
-      {/* Black middle stripe */}
-      <Path d="M 28 55 Q 60 48 92 55 Q 92 58 60 52 Q 28 58 28 55 Z" fill="#1A1A1A" />
-
-      {/* Red bottom stripe */}
-      <Path d="M 26 65 Q 60 60 94 65 Q 94 68 60 63 Q 26 68 26 65 Z" fill="#E63946" />
-
-      {/* Visor (dark tinted) */}
-      <Ellipse cx="60" cy="60" rx="25" ry="18" fill="#1A1A1A" opacity="0.9" />
-
-      {/* Visor highlight */}
-      <Ellipse cx="55" cy="55" rx="8" ry="5" fill="#4A4A4A" opacity="0.6" />
-
-      {/* Chin guard */}
-      <Path d="M 35 85 Q 60 95 85 85 L 80 90 Q 60 98 40 90 Z" fill="#E8E8E8" />
-      <Path d="M 35 85 Q 60 95 85 85 L 80 90 Q 60 98 40 90 Z" fill="url(#helmet-gradient)" />
-
-      {/* Air vents */}
-      <Ellipse cx="45" cy="70" rx="2" ry="4" fill="#1A1A1A" opacity="0.5" />
-      <Ellipse cx="75" cy="70" rx="2" ry="4" fill="#1A1A1A" opacity="0.5" />
-    </Svg>
+    <Image
+      source={require('../../../assets/casca.png')}
+      style={{ width: size, height: size }}
+      resizeMode="contain"
+    />
   );
 }
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const [featuredScooters, setFeaturedScooters] = useState<Scooter[]>([]);
+  const [latestScooters, setLatestScooters] = useState<Scooter[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    loadScooters();
+  }, []);
+
+  const loadScooters = async () => {
+    try {
+      setLoading(true);
+      const [featured, latest] = await Promise.all([
+        getFeaturedScooters(),
+        getLatestScooters(),
+      ]);
+      setFeaturedScooters(adaptStrapiScooters(featured));
+      setLatestScooters(adaptStrapiScooters(latest));
+    } catch (error) {
+      console.error('Error loading scooters:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleFavorite = (id: number) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(id)) {
+        newFavorites.delete(id);
+      } else {
+        newFavorites.add(id);
+      }
+      return newFavorites;
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -104,72 +100,83 @@ export default function HomeScreen() {
           <Text style={styles.headerSubtitle}>Descoperă scuterul potrivit pentru tine</Text>
         </View>
 
-        {/* Inline Stats */}
-        <View style={styles.statsRow}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>50+</Text>
-            <Text style={styles.statLabel}>modele</Text>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.accent} />
           </View>
-          <Text style={styles.statDivider}>•</Text>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>15+</Text>
-            <Text style={styles.statLabel}>branduri</Text>
-          </View>
-          <Text style={styles.statDivider}>•</Text>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>★ 4.8</Text>
-          </View>
-        </View>
+        ) : (
+          <>
+            {/* Popular Section */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Populare</Text>
+                <TouchableOpacity>
+                  <Text style={styles.seeAllButton}>Vezi toate</Text>
+                </TouchableOpacity>
+              </View>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.horizontalScroll}
+                snapToInterval={CARD_WIDTH + CARD_SPACING}
+                decelerationRate="fast"
+              >
+                {featuredScooters.map((scooter, index) => (
+                  <ScooterCard
+                    key={scooter.id}
+                    scooter={scooter}
+                    index={index}
+                    isFavorite={favorites.has(scooter.id)}
+                    onToggleFavorite={() => toggleFavorite(scooter.id)}
+                  />
+                ))}
+              </ScrollView>
+            </View>
 
-        {/* Popular Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Populare</Text>
-            <TouchableOpacity>
-              <Text style={styles.seeAllButton}>Vezi toate</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}
-            snapToInterval={CARD_WIDTH + CARD_SPACING}
-            decelerationRate="fast"
-          >
-            {popularScooters.map((scooter, index) => (
-              <ScooterCard key={scooter.id} scooter={scooter} index={index} />
-            ))}
-          </ScrollView>
-        </View>
-
-        {/* New Arrivals Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Noutăți</Text>
-            <TouchableOpacity>
-              <Text style={styles.seeAllButton}>Vezi toate</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}
-            snapToInterval={CARD_WIDTH + CARD_SPACING}
-            decelerationRate="fast"
-          >
-            {newScooters.map((scooter, index) => (
-              <ScooterCard key={scooter.id} scooter={scooter} index={index} isNew />
-            ))}
-          </ScrollView>
-        </View>
+            {/* New Arrivals Section */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Noutăți</Text>
+                <TouchableOpacity>
+                  <Text style={styles.seeAllButton}>Vezi toate</Text>
+                </TouchableOpacity>
+              </View>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.horizontalScroll}
+                snapToInterval={CARD_WIDTH + CARD_SPACING}
+                decelerationRate="fast"
+              >
+                {latestScooters.map((scooter, index) => (
+                  <ScooterCard
+                    key={scooter.id}
+                    scooter={scooter}
+                    index={index}
+                    isFavorite={favorites.has(scooter.id)}
+                    onToggleFavorite={() => toggleFavorite(scooter.id)}
+                    isNew
+                  />
+                ))}
+              </ScrollView>
+            </View>
+          </>
+        )}
       </ScrollView>
     </View>
   );
 }
 
-function ScooterCard({ scooter, index, isNew = false }: any) {
+interface ScooterCardProps {
+  scooter: Scooter;
+  index: number;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+  isNew?: boolean;
+}
+
+function ScooterCard({ scooter, index, isFavorite, onToggleFavorite, isNew = false }: ScooterCardProps) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
-  const [isFavorite, setIsFavorite] = React.useState(false);
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
@@ -187,10 +194,6 @@ function ScooterCard({ scooter, index, isNew = false }: any) {
     }).start();
   };
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
-
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -200,15 +203,25 @@ function ScooterCard({ scooter, index, isNew = false }: any) {
     >
       <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>
         <View style={styles.cardImageContainer}>
-          <Text style={styles.cardImagePlaceholder}>{scooter.image}</Text>
-          {isNew && scooter.badge && (
+          {scooter.image ? (
+            <Image
+              source={{ uri: scooter.image }}
+              style={styles.cardImage}
+              resizeMode="cover"
+            />
+          ) : (
+            <View style={styles.cardImagePlaceholder}>
+              <Text style={styles.placeholderText}>🏍️</Text>
+            </View>
+          )}
+          {scooter.badge && (
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{scooter.badge}</Text>
             </View>
           )}
           <TouchableOpacity
             style={styles.favoriteButton}
-            onPress={toggleFavorite}
+            onPress={onToggleFavorite}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Text style={styles.favoriteIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
@@ -223,9 +236,6 @@ function ScooterCard({ scooter, index, isNew = false }: any) {
           </Text>
           <View style={styles.cardFooter}>
             <Text style={styles.cardPrice}>{scooter.price}</Text>
-            {scooter.rating && (
-              <Text style={styles.cardRating}>★ {scooter.rating}</Text>
-            )}
           </View>
         </View>
       </Animated.View>
@@ -244,6 +254,13 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingTop: spacing.xxxl,
+  },
+
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: spacing.xxxl * 3,
   },
 
   // Header with Logo
@@ -347,8 +364,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
   },
+  cardImage: {
+    width: '100%',
+    height: '100%',
+  },
   cardImagePlaceholder: {
-    fontSize: 100,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.systemGray5,
+  },
+  placeholderText: {
+    fontSize: 60,
   },
   badge: {
     position: 'absolute',
