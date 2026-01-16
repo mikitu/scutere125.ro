@@ -27,7 +27,8 @@ export default function ScooterDetailScreen() {
   const [scooter, setScooter] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
+  const galleryRef = React.useRef<FlatList>(null);
 
   useEffect(() => {
     loadScooter();
@@ -38,6 +39,10 @@ export default function ScooterDetailScreen() {
       setLoading(true);
       const data = await getScooterBySlug(slug);
       setScooter(data);
+      // Set default color (first color if available)
+      if (data?.attributes?.colors?.data?.length > 0) {
+        setSelectedColorId(data.attributes.colors.data[0].id);
+      }
     } catch (error) {
       console.error('Error loading scooter:', error);
     } finally {
@@ -55,30 +60,63 @@ export default function ScooterDetailScreen() {
     setIsFavorite(!isFavorite);
   };
 
+  const handleColorSelect = (colorId: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedColorId(colorId);
+    // Scroll gallery to first image when color changes
+    galleryRef.current?.scrollToOffset({ offset: 0, animated: true });
+  };
+
   if (loading) {
     return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="large" color={themeColors.accent} />
-      </View>
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <View style={[styles.container, styles.loadingContainer]}>
+          <ActivityIndicator size="large" color={themeColors.accent} />
+        </View>
+      </>
     );
   }
 
   if (!scooter) {
     return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        <Text style={styles.errorText}>Scuterul nu a fost găsit</Text>
-      </View>
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <View style={[styles.container, styles.loadingContainer]}>
+          <Text style={styles.errorText}>Scuterul nu a fost găsit</Text>
+        </View>
+      </>
     );
   }
 
   const adaptedScooter = adaptStrapiScooter(scooter);
 
-  // Get gallery images
-  const galleryImages = getImageUrls(scooter.attributes.gallery);
-  const displayImages = galleryImages.length > 0 ? galleryImages : (adaptedScooter.image ? [adaptedScooter.image] : []);
-
   // Get scooter colors
   const scooterColors = scooter.attributes.colors?.data || [];
+
+  // Get selected color or default
+  const selectedColor = scooterColors.find((c: StrapiScooterColor) => c.id === selectedColorId) || scooterColors[0];
+
+  // Get images for selected color
+  let displayImages: string[] = [];
+  if (selectedColor) {
+    // Use color's gallery if available, otherwise color's main image, otherwise scooter's images
+    const colorGallery = getImageUrls(selectedColor.attributes.gallery);
+    const colorImage = getImageUrls(selectedColor.attributes.image);
+
+    if (colorGallery.length > 0) {
+      displayImages = colorGallery;
+    } else if (colorImage.length > 0) {
+      displayImages = colorImage;
+    }
+  }
+
+  // Fallback to scooter's default images if no color images
+  if (displayImages.length === 0) {
+    const scooterGallery = getImageUrls(scooter.attributes.gallery);
+    const scooterImage = adaptedScooter.image ? [adaptedScooter.image] : [];
+    displayImages = scooterGallery.length > 0 ? scooterGallery : scooterImage;
+  }
 
   return (
     <>
@@ -92,14 +130,11 @@ export default function ScooterDetailScreen() {
           {/* Gallery */}
           <View style={styles.heroContainer}>
             <FlatList
+              ref={galleryRef}
               data={displayImages}
               horizontal
               pagingEnabled
               showsHorizontalScrollIndicator={false}
-              onMomentumScrollEnd={(e) => {
-                const index = Math.round(e.nativeEvent.contentOffset.x / width);
-                setSelectedImageIndex(index);
-              }}
               renderItem={({ item }) => (
                 item ? (
                   <Image
@@ -113,7 +148,7 @@ export default function ScooterDetailScreen() {
                   </View>
                 )
               )}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item, index) => `${selectedColorId}-${index}`}
             />
 
             {/* Header Buttons */}
@@ -126,20 +161,7 @@ export default function ScooterDetailScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* Gallery Indicator */}
-            {displayImages.length > 1 && (
-              <View style={styles.galleryIndicator}>
-                {displayImages.map((_, index) => (
-                  <View
-                    key={index}
-                    style={[
-                      styles.indicatorDot,
-                      index === selectedImageIndex && styles.indicatorDotActive,
-                    ]}
-                  />
-                ))}
-              </View>
-            )}
+
 
             {/* Badge */}
             {adaptedScooter.badge && (
@@ -166,29 +188,49 @@ export default function ScooterDetailScreen() {
                 <Text style={styles.sectionTitle}>Culori disponibile</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <View style={styles.colorsContainer}>
-                    {scooterColors.map((color: StrapiScooterColor) => (
-                      <TouchableOpacity
-                        key={color.id}
-                        style={styles.colorItem}
-                        onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
-                      >
-                        {color.attributes.hex ? (
-                          <View
-                            style={[
-                              styles.colorCircle,
-                              { backgroundColor: color.attributes.hex },
-                            ]}
-                          />
-                        ) : (
-                          <View style={[styles.colorCircle, styles.colorCirclePlaceholder]}>
-                            <Text style={styles.colorCircleText}>?</Text>
+                    {scooterColors.map((color: StrapiScooterColor) => {
+                      const colorImage = getImageUrls(color.attributes.image)[0] ||
+                                        getImageUrls(color.attributes.listingImage)[0];
+                      const isSelected = color.id === selectedColorId;
+
+                      return (
+                        <TouchableOpacity
+                          key={color.id}
+                          style={styles.colorItem}
+                          onPress={() => handleColorSelect(color.id)}
+                        >
+                          <View style={[
+                            styles.colorCircle,
+                            isSelected && styles.colorCircleSelected,
+                          ]}>
+                            {colorImage ? (
+                              <Image
+                                source={{ uri: colorImage }}
+                                style={styles.colorCircleImage}
+                                resizeMode="cover"
+                              />
+                            ) : color.attributes.hex ? (
+                              <View
+                                style={[
+                                  styles.colorCircleSolid,
+                                  { backgroundColor: color.attributes.hex },
+                                ]}
+                              />
+                            ) : (
+                              <View style={styles.colorCirclePlaceholder}>
+                                <Text style={styles.colorCircleText}>?</Text>
+                              </View>
+                            )}
                           </View>
-                        )}
-                        <Text style={styles.colorName} numberOfLines={1}>
-                          {color.attributes.name}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
+                          <Text style={[
+                            styles.colorName,
+                            isSelected && styles.colorNameSelected,
+                          ]} numberOfLines={1}>
+                            {color.attributes.name}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
                 </ScrollView>
               </View>
@@ -270,25 +312,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
     zIndex: 10,
-  },
-  galleryIndicator: {
-    position: 'absolute',
-    bottom: spacing.xl,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: spacing.xs,
-  },
-  indicatorDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-  },
-  indicatorDotActive: {
-    backgroundColor: themeColors.accent,
-    width: 20,
   },
   headerButton: {
     width: 44,
@@ -385,14 +408,32 @@ const styles = StyleSheet.create({
     width: 70,
   },
   colorCircle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 2,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 3,
     borderColor: themeColors.systemGray5,
+    overflow: 'hidden',
+    backgroundColor: themeColors.systemGray6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  colorCircleSelected: {
+    borderColor: themeColors.accent,
+    borderWidth: 3,
     ...shadows.card,
   },
+  colorCircleImage: {
+    width: '100%',
+    height: '100%',
+  },
+  colorCircleSolid: {
+    width: '100%',
+    height: '100%',
+  },
   colorCirclePlaceholder: {
+    width: '100%',
+    height: '100%',
     backgroundColor: themeColors.systemGray5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -405,6 +446,10 @@ const styles = StyleSheet.create({
     ...typography.caption1,
     color: themeColors.textSecondary,
     textAlign: 'center',
+  },
+  colorNameSelected: {
+    color: themeColors.accent,
+    fontWeight: '600',
   },
 });
 
