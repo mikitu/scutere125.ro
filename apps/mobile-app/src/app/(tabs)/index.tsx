@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -40,15 +41,20 @@ export default function HomeScreen() {
   const [featuredScooters, setFeaturedScooters] = useState<Scooter[]>([]);
   const [latestScooters, setLatestScooters] = useState<Scooter[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     loadScooters();
   }, []);
 
-  const loadScooters = async () => {
+  const loadScooters = async (isRefreshing = false) => {
     try {
-      setLoading(true);
+      if (isRefreshing) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
       const [featured, latest] = await Promise.all([
         getFeaturedScooters(),
         getLatestScooters(),
@@ -58,8 +64,17 @@ export default function HomeScreen() {
     } catch (error) {
       console.error('Error loading scooters:', error);
     } finally {
-      setLoading(false);
+      if (isRefreshing) {
+        setRefreshing(false);
+      } else {
+        setLoading(false);
+      }
     }
+  };
+
+  const handleRefresh = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    loadScooters(true);
   };
 
   const toggleFavorite = (id: number) => {
@@ -91,6 +106,13 @@ export default function HomeScreen() {
         style={styles.scrollView}
         contentContainerStyle={[styles.content, { paddingTop: insets.top, paddingBottom: insets.bottom + 100 }]}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={colors.accent}
+          />
+        }
       >
         {/* Header with Logo */}
         <View style={styles.header}>

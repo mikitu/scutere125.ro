@@ -26,15 +26,20 @@ export default function AllScootersScreen() {
   const insets = useSafeAreaInsets();
   const [scooters, setScooters] = useState<Scooter[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     loadScooters();
   }, [section]);
 
-  const loadScooters = async () => {
+  const loadScooters = async (isRefreshing = false) => {
     try {
-      setLoading(true);
+      if (isRefreshing) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
       let data;
       if (section === 'featured') {
         data = await getFeaturedScooters();
@@ -47,8 +52,17 @@ export default function AllScootersScreen() {
     } catch (error) {
       console.error('Error loading scooters:', error);
     } finally {
-      setLoading(false);
+      if (isRefreshing) {
+        setRefreshing(false);
+      } else {
+        setLoading(false);
+      }
     }
+  };
+
+  const handleRefresh = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    loadScooters(true);
   };
 
   const handleBack = () => {
@@ -153,6 +167,8 @@ export default function AllScootersScreen() {
           ]}
           columnWrapperStyle={styles.row}
           showsVerticalScrollIndicator={false}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
         />
       )}
       </View>
