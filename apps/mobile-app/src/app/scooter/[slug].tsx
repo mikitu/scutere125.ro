@@ -348,11 +348,15 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
   },
   dotActive: {
     backgroundColor: themeColors.accent,
     width: 20,
+    borderColor: 'rgba(255, 255, 255, 1)',
+    borderWidth: 1.5,
   },
   headerButton: {
     width: 44,
