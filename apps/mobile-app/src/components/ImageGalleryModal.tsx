@@ -8,12 +8,11 @@ import {
   FlatList,
   StatusBar,
 } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -56,7 +55,7 @@ export function ImageGalleryModal({
     onClose();
   };
 
-  const renderImage = ({ item, index }: { item: string; index: number }) => {
+  const renderImage = ({ item }: { item: string }) => {
     return <ZoomableImage uri={item} />;
   };
 
@@ -68,7 +67,8 @@ export function ImageGalleryModal({
       onRequestClose={handleClose}
     >
       <StatusBar hidden />
-      <View style={styles.container}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View style={styles.container}>
         {/* Close Button */}
         <TouchableOpacity
           style={[styles.closeButton, { top: insets.top + spacing.md }]}
@@ -82,7 +82,7 @@ export function ImageGalleryModal({
           ref={flatListRef}
           data={images}
           renderItem={renderImage}
-          keyExtractor={(item, index) => `gallery-${index}`}
+          keyExtractor={(_item, index) => `gallery-${index}`}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
@@ -90,7 +90,7 @@ export function ImageGalleryModal({
             const index = Math.round(e.nativeEvent.contentOffset.x / width);
             setCurrentIndex(index);
           }}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_data, index) => ({
             length: width,
             offset: width * index,
             index,
@@ -111,7 +111,8 @@ export function ImageGalleryModal({
             ))}
           </View>
         )}
-      </View>
+        </View>
+      </GestureHandlerRootView>
     </Modal>
   );
 }
