@@ -146,11 +146,18 @@ function ZoomableImage({ uri }: { uri: string }) {
     });
 
   const panGesture = Gesture.Pan()
-    .onUpdate((e) => {
+    .manualActivation(true)
+    .onTouchesMove((_e, state) => {
+      // Only activate pan if zoomed
       if (savedScale.value > 1) {
-        translateX.value = savedTranslateX.value + e.translationX;
-        translateY.value = savedTranslateY.value + e.translationY;
+        state.activate();
+      } else {
+        state.fail();
       }
+    })
+    .onUpdate((e) => {
+      translateX.value = savedTranslateX.value + e.translationX;
+      translateY.value = savedTranslateY.value + e.translationY;
     })
     .onEnd(() => {
       savedTranslateX.value = translateX.value;
@@ -173,7 +180,6 @@ function ZoomableImage({ uri }: { uri: string }) {
         scale.value = withSpring(2);
         savedScale.value = 2;
       }
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     });
 
   const composedGesture = Gesture.Simultaneous(

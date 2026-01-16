@@ -138,38 +138,38 @@ export default function ScooterDetailScreen() {
         >
           {/* Gallery */}
           <View style={styles.heroContainer}>
-            <TouchableOpacity
-              style={styles.galleryTouchable}
-              onPress={handleImagePress}
-              activeOpacity={0.95}
-            >
-              <FlatList
-                ref={galleryRef}
-                data={displayImages}
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                scrollEnabled={true}
-                onMomentumScrollEnd={(e) => {
-                  const index = Math.round(e.nativeEvent.contentOffset.x / width);
-                  setCurrentImageIndex(index);
-                }}
-                renderItem={({ item }) => (
-                  item ? (
+            <FlatList
+              ref={galleryRef}
+              data={displayImages}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              scrollEnabled={true}
+              onMomentumScrollEnd={(e) => {
+                const index = Math.round(e.nativeEvent.contentOffset.x / width);
+                setCurrentImageIndex(index);
+              }}
+              renderItem={({ item }) => (
+                item ? (
+                  <TouchableOpacity
+                    onPress={handleImagePress}
+                    activeOpacity={0.95}
+                    style={styles.galleryTouchable}
+                  >
                     <Image
                       source={{ uri: item }}
                       style={styles.heroImage}
                       resizeMode="cover"
                     />
-                  ) : (
-                    <View style={styles.heroPlaceholder}>
-                      <Text style={styles.heroPlaceholderText}>🏍️</Text>
-                    </View>
-                  )
-                )}
-                keyExtractor={(item, index) => `${selectedColorId}-${index}`}
-              />
-            </TouchableOpacity>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={styles.heroPlaceholder}>
+                    <Text style={styles.heroPlaceholderText}>🏍️</Text>
+                  </View>
+                )
+              )}
+              keyExtractor={(item, index) => `${selectedColorId}-${index}`}
+            />
 
             {/* Header Buttons */}
             <View style={[styles.headerButtons, { top: insets.top + spacing.md }]}>
