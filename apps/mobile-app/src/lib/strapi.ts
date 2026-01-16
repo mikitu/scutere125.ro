@@ -111,10 +111,10 @@ export async function getFeaturedScooters(): Promise<StrapiScooter[]> {
   return response.data;
 }
 
-// Get latest scooters (first 5, sorted by createdAt DESC)
-export async function getLatestScooters(): Promise<StrapiScooter[]> {
+// Get latest scooters (sorted by createdAt DESC)
+export async function getLatestScooters(limit: number = 5): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    '/scooters?pagination[limit]=5&populate[listingImage]=*&populate[categories]=*&sort[0]=createdAt:desc'
+    `/scooters?pagination[limit]=${limit}&populate[listingImage]=*&populate[categories]=*&sort[0]=createdAt:desc`
   );
   return response.data;
 }

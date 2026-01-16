@@ -44,7 +44,7 @@ export default function AllScootersScreen() {
       if (section === 'featured') {
         data = await getFeaturedScooters();
       } else if (section === 'latest') {
-        data = await getLatestScooters();
+        data = await getLatestScooters(20);
       } else {
         data = await getAllScooters(20);
       }
