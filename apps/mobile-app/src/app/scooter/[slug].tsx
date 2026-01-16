@@ -17,6 +17,7 @@ import * as Haptics from 'expo-haptics';
 import { colors as themeColors, spacing, typography, shadows } from '../../constants/theme';
 import { getScooterBySlug, getImageUrls, StrapiScooterColor } from '../../lib/strapi';
 import { adaptStrapiScooter, Scooter } from '../../lib/scooter-adapter';
+import { ImageGalleryModal } from '../../components/ImageGalleryModal';
 
 const { width, height } = Dimensions.get('window');
 
@@ -29,6 +30,7 @@ export default function ScooterDetailScreen() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [galleryModalVisible, setGalleryModalVisible] = useState(false);
   const galleryRef = React.useRef<FlatList>(null);
 
   useEffect(() => {
@@ -67,6 +69,11 @@ export default function ScooterDetailScreen() {
     setCurrentImageIndex(0);
     // Scroll gallery to first image when color changes
     galleryRef.current?.scrollToOffset({ offset: 0, animated: true });
+  };
+
+  const handleImagePress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setGalleryModalVisible(true);
   };
 
   if (loading) {
@@ -130,13 +137,18 @@ export default function ScooterDetailScreen() {
           showsVerticalScrollIndicator={false}
         >
           {/* Gallery */}
-          <View style={styles.heroContainer}>
+          <TouchableOpacity
+            style={styles.heroContainer}
+            onPress={handleImagePress}
+            activeOpacity={0.95}
+          >
             <FlatList
               ref={galleryRef}
               data={displayImages}
               horizontal
               pagingEnabled
               showsHorizontalScrollIndicator={false}
+              scrollEnabled={true}
               onMomentumScrollEnd={(e) => {
                 const index = Math.round(e.nativeEvent.contentOffset.x / width);
                 setCurrentImageIndex(index);
@@ -156,6 +168,7 @@ export default function ScooterDetailScreen() {
               )}
               keyExtractor={(item, index) => `${selectedColorId}-${index}`}
             />
+          </TouchableOpacity>
 
             {/* Header Buttons */}
             <View style={[styles.headerButtons, { top: insets.top + spacing.md }]}>
@@ -275,6 +288,14 @@ export default function ScooterDetailScreen() {
             </View>
           </View>
         </ScrollView>
+
+        {/* Fullscreen Gallery Modal */}
+        <ImageGalleryModal
+          visible={galleryModalVisible}
+          images={displayImages}
+          initialIndex={currentImageIndex}
+          onClose={() => setGalleryModalVisible(false)}
+        />
       </View>
     </>
   );
