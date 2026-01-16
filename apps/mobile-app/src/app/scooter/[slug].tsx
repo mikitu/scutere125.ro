@@ -137,38 +137,39 @@ export default function ScooterDetailScreen() {
           showsVerticalScrollIndicator={false}
         >
           {/* Gallery */}
-          <TouchableOpacity
-            style={styles.heroContainer}
-            onPress={handleImagePress}
-            activeOpacity={0.95}
-          >
-            <FlatList
-              ref={galleryRef}
-              data={displayImages}
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              scrollEnabled={true}
-              onMomentumScrollEnd={(e) => {
-                const index = Math.round(e.nativeEvent.contentOffset.x / width);
-                setCurrentImageIndex(index);
-              }}
-              renderItem={({ item }) => (
-                item ? (
-                  <Image
-                    source={{ uri: item }}
-                    style={styles.heroImage}
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <View style={styles.heroPlaceholder}>
-                    <Text style={styles.heroPlaceholderText}>🏍️</Text>
-                  </View>
-                )
-              )}
-              keyExtractor={(item, index) => `${selectedColorId}-${index}`}
-            />
-          </TouchableOpacity>
+          <View style={styles.heroContainer}>
+            <TouchableOpacity
+              style={styles.galleryTouchable}
+              onPress={handleImagePress}
+              activeOpacity={0.95}
+            >
+              <FlatList
+                ref={galleryRef}
+                data={displayImages}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                scrollEnabled={true}
+                onMomentumScrollEnd={(e) => {
+                  const index = Math.round(e.nativeEvent.contentOffset.x / width);
+                  setCurrentImageIndex(index);
+                }}
+                renderItem={({ item }) => (
+                  item ? (
+                    <Image
+                      source={{ uri: item }}
+                      style={styles.heroImage}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View style={styles.heroPlaceholder}>
+                      <Text style={styles.heroPlaceholderText}>🏍️</Text>
+                    </View>
+                  )
+                )}
+                keyExtractor={(item, index) => `${selectedColorId}-${index}`}
+              />
+            </TouchableOpacity>
 
             {/* Header Buttons */}
             <View style={[styles.headerButtons, { top: insets.top + spacing.md }]}>
@@ -331,6 +332,10 @@ const styles = StyleSheet.create({
     width: width,
     height: height * 0.5,
     position: 'relative',
+  },
+  galleryTouchable: {
+    width,
+    height: height * 0.5,
   },
   heroImage: {
     width: width,
