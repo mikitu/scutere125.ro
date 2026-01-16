@@ -12,20 +12,16 @@
       "internalConsoleOptions": "neverOpen"
     },
     {
-            "name": "Prebuild",
-            "type": "node",
-            "request": "launch",
-            "runtimeExecutable": "npx",
-            "runtimeArgs": [
-                "expo",
-                "prebuild"
-            ],
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}"
-        },
+      "name": "Expo: Prebuild",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "prebuild"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/apps/mobile-app",
+      "autoAttachChildProcesses": false
+    },
     {
       "name": "Expo: Run iOS Simulator",
       "type": "node",
