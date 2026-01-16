@@ -28,6 +28,7 @@ export default function ScooterDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const galleryRef = React.useRef<FlatList>(null);
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function ScooterDetailScreen() {
   const handleColorSelect = (colorId: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedColorId(colorId);
+    setCurrentImageIndex(0);
     // Scroll gallery to first image when color changes
     galleryRef.current?.scrollToOffset({ offset: 0, animated: true });
   };
@@ -97,25 +99,25 @@ export default function ScooterDetailScreen() {
   // Get selected color or default
   const selectedColor = scooterColors.find((c: StrapiScooterColor) => c.id === selectedColorId) || scooterColors[0];
 
-  // Get images for selected color
+  // Build gallery: [color main image, ...scooter gallery]
   let displayImages: string[] = [];
-  if (selectedColor) {
-    // Use color's gallery if available, otherwise color's main image, otherwise scooter's images
-    const colorGallery = getImageUrls(selectedColor.attributes.gallery);
-    const colorImage = getImageUrls(selectedColor.attributes.image);
 
-    if (colorGallery.length > 0) {
-      displayImages = colorGallery;
-    } else if (colorImage.length > 0) {
-      displayImages = colorImage;
+  // 1. Get color's main image (position 1)
+  if (selectedColor) {
+    const colorImage = getImageUrls(selectedColor.attributes.image)[0] ||
+                      getImageUrls(selectedColor.attributes.listingImage)[0];
+    if (colorImage) {
+      displayImages.push(colorImage);
     }
   }
 
-  // Fallback to scooter's default images if no color images
-  if (displayImages.length === 0) {
-    const scooterGallery = getImageUrls(scooter.attributes.gallery);
-    const scooterImage = adaptedScooter.image ? [adaptedScooter.image] : [];
-    displayImages = scooterGallery.length > 0 ? scooterGallery : scooterImage;
+  // 2. Add scooter's gallery (positions 2+)
+  const scooterGallery = getImageUrls(scooter.attributes.gallery);
+  displayImages = [...displayImages, ...scooterGallery];
+
+  // 3. Fallback if no images at all
+  if (displayImages.length === 0 && adaptedScooter.image) {
+    displayImages = [adaptedScooter.image];
   }
 
   return (
@@ -135,6 +137,10 @@ export default function ScooterDetailScreen() {
               horizontal
               pagingEnabled
               showsHorizontalScrollIndicator={false}
+              onMomentumScrollEnd={(e) => {
+                const index = Math.round(e.nativeEvent.contentOffset.x / width);
+                setCurrentImageIndex(index);
+              }}
               renderItem={({ item }) => (
                 item ? (
                   <Image
@@ -162,6 +168,21 @@ export default function ScooterDetailScreen() {
             </View>
 
 
+
+            {/* Gallery Pagination Dots */}
+            {displayImages.length > 1 && (
+              <View style={styles.paginationDots}>
+                {displayImages.map((_, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.dot,
+                      index === currentImageIndex && styles.dotActive,
+                    ]}
+                  />
+                ))}
+              </View>
+            )}
 
             {/* Badge */}
             {adaptedScooter.badge && (
@@ -312,6 +333,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
     zIndex: 10,
+  },
+  paginationDots: {
+    position: 'absolute',
+    bottom: spacing.xl,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: spacing.xs,
+    zIndex: 5,
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  dotActive: {
+    backgroundColor: themeColors.accent,
+    width: 20,
   },
   headerButton: {
     width: 44,
