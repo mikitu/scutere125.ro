@@ -21,6 +21,11 @@ interface StrapiCategory {
     name: string;
     slug: string;
     displayName: string;
+    icon?: string;
+    order?: number;
+    scooters?: {
+      data: Array<{ id: number }>;
+    };
   };
 }
 
@@ -122,7 +127,7 @@ export async function getLatestScooters(limit: number = 5): Promise<StrapiScoote
 // Get all scooters
 export async function getAllScooters(limit: number = 100): Promise<StrapiScooter[]> {
   const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
-    `/scooters?populate[listingImage]=*&populate[categories]=*&sort[0]=createdAt:desc&pagination[limit]=${limit}`
+    `/scooters?populate[listingImage]=*&populate[image]=*&populate[categories]=*&sort[0]=createdAt:desc&pagination[limit]=${limit}`
   );
   return response.data;
 }
@@ -159,5 +164,40 @@ export function getImageUrls(media: StrapiMedia): string[] {
       const url = img.attributes.url;
       return url.startsWith('http') ? url : `${STRAPI_URL}${url}`;
     });
+}
+
+// Get categories with scooter count
+export async function getCategories(): Promise<Array<{ id: number; name: string; displayName: string; slug: string; icon: string; count: number }>> {
+  const response = await fetchAPI<StrapiResponse<StrapiCategory[]>>(
+    '/categories?populate[scooters][fields][0]=id&sort[0]=order:asc'
+  );
+
+  return response.data.map(cat => ({
+    id: cat.id,
+    name: cat.attributes.name,
+    displayName: cat.attributes.displayName,
+    slug: cat.attributes.slug,
+    icon: cat.attributes.icon || '🏍️',
+    count: cat.attributes.scooters?.data?.length || 0,
+  }));
+}
+
+// Get brands (manufacturers) with scooter count
+export async function getBrands(): Promise<Array<{ name: string; count: number }>> {
+  const response = await fetchAPI<StrapiResponse<StrapiScooter[]>>(
+    '/scooters?fields[0]=manufacturer&pagination[limit]=1000'
+  );
+
+  // Count scooters per manufacturer
+  const brandCounts: Record<string, number> = {};
+  response.data.forEach(scooter => {
+    const brand = scooter.attributes.manufacturer;
+    brandCounts[brand] = (brandCounts[brand] || 0) + 1;
+  });
+
+  // Convert to array and sort by count descending
+  return Object.entries(brandCounts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count);
 }
 

@@ -21,7 +21,12 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - spacing.xl * 3) / 2;
 
 export default function AllScootersScreen() {
-  const { section } = useLocalSearchParams<{ section?: string }>();
+  const { section, category, manufacturer, title: customTitle } = useLocalSearchParams<{
+    section?: string;
+    category?: string;
+    manufacturer?: string;
+    title?: string;
+  }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [scooters, setScooters] = useState<Scooter[]>([]);
@@ -31,7 +36,7 @@ export default function AllScootersScreen() {
 
   useEffect(() => {
     loadScooters();
-  }, [section]);
+  }, [section, category, manufacturer]);
 
   const loadScooters = async (isRefreshing = false) => {
     try {
@@ -46,9 +51,26 @@ export default function AllScootersScreen() {
       } else if (section === 'latest') {
         data = await getLatestScooters(20);
       } else {
-        data = await getAllScooters(20);
+        data = await getAllScooters(100);
       }
-      setScooters(adaptStrapiScooters(data));
+
+      let filteredScooters = adaptStrapiScooters(data);
+
+      // Filter by category if provided
+      if (category) {
+        filteredScooters = filteredScooters.filter(scooter =>
+          scooter.categories?.some(cat => cat.slug === category)
+        );
+      }
+
+      // Filter by manufacturer if provided
+      if (manufacturer) {
+        filteredScooters = filteredScooters.filter(scooter =>
+          scooter.manufacturer === manufacturer
+        );
+      }
+
+      setScooters(filteredScooters);
     } catch (error) {
       console.error('Error loading scooters:', error);
     } finally {
@@ -89,6 +111,7 @@ export default function AllScootersScreen() {
   };
 
   const getTitle = () => {
+    if (customTitle) return customTitle;
     if (section === 'featured') return 'Scutere Populare';
     if (section === 'latest') return 'Noutăți';
     return 'Toate Scuterele';
