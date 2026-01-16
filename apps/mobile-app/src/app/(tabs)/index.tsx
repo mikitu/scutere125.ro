@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -17,8 +17,9 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { colors, spacing, typography, borderRadius, shadows } from '../../constants/theme';
-import { getFeaturedScooters, getLatestScooters } from '../../lib/strapi';
-import { adaptStrapiScooters, Scooter } from '../../lib/scooter-adapter';
+import { useFeaturedScooters, useLatestScooters } from '../../hooks/useScooters';
+import { useFavorites } from '../../hooks/useFavorites';
+import { Scooter } from '../../lib/scooter-adapter';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - spacing.lg * 3) / 2; // 2 cards visible
@@ -38,55 +39,32 @@ function HelmetIcon({ size = 40 }: { size?: number }) {
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const [featuredScooters, setFeaturedScooters] = useState<Scooter[]>([]);
-  const [latestScooters, setLatestScooters] = useState<Scooter[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  // Use React Query hooks
+  const { data: featuredScooters = [], isLoading: featuredLoading, refetch: refetchFeatured } = useFeaturedScooters();
+  const { data: latestScooters = [], isLoading: latestLoading, refetch: refetchLatest } = useLatestScooters();
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   const [refreshing, setRefreshing] = useState(false);
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
-  useEffect(() => {
-    loadScooters();
-  }, []);
+  const loading = featuredLoading || latestLoading;
 
-  const loadScooters = async (isRefreshing = false) => {
-    try {
-      if (isRefreshing) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
-      const [featured, latest] = await Promise.all([
-        getFeaturedScooters(),
-        getLatestScooters(),
-      ]);
-      setFeaturedScooters(adaptStrapiScooters(featured));
-      setLatestScooters(adaptStrapiScooters(latest));
-    } catch (error) {
-      console.error('Error loading scooters:', error);
-    } finally {
-      if (isRefreshing) {
-        setRefreshing(false);
-      } else {
-        setLoading(false);
-      }
-    }
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await Promise.all([refetchFeatured(), refetchLatest()]);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  const handleRefresh = () => {
+  const handleToggleFavorite = async (scooter: Scooter) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    loadScooters(true);
-  };
-
-  const toggleFavorite = (id: number) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(id)) {
-        newFavorites.delete(id);
-      } else {
-        newFavorites.add(id);
-      }
-      return newFavorites;
+    await toggleFavorite({
+      id: scooter.id,
+      slug: scooter.slug,
+      name: scooter.name,
+      image: scooter.image,
+      price: scooter.price,
+      category: scooter.category,
+      manufacturer: scooter.manufacturer,
     });
   };
 
@@ -159,8 +137,8 @@ export default function HomeScreen() {
                     key={scooter.id}
                     scooter={scooter}
                     index={index}
-                    isFavorite={favorites.has(scooter.id)}
-                    onToggleFavorite={() => toggleFavorite(scooter.id)}
+                    isFavorite={isFavorite(scooter.id)}
+                    onToggleFavorite={() => handleToggleFavorite(scooter)}
                     onPress={() => handleScooterPress(scooter)}
                   />
                 ))}
@@ -187,8 +165,8 @@ export default function HomeScreen() {
                     key={scooter.id}
                     scooter={scooter}
                     index={index}
-                    isFavorite={favorites.has(scooter.id)}
-                    onToggleFavorite={() => toggleFavorite(scooter.id)}
+                    isFavorite={isFavorite(scooter.id)}
+                    onToggleFavorite={() => handleToggleFavorite(scooter)}
                     onPress={() => handleScooterPress(scooter)}
                     isNew
                   />

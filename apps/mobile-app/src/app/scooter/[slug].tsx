@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -15,9 +15,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors as themeColors, spacing, typography, shadows } from '../../constants/theme';
-import { getScooterBySlug, getImageUrls, StrapiScooterColor } from '../../lib/strapi';
+import { getImageUrls, StrapiScooterColor } from '../../lib/strapi';
 import { adaptStrapiScooter, Scooter } from '../../lib/scooter-adapter';
 import { ImageGalleryModal } from '../../components/ImageGalleryModal';
+import { useFavorites } from '../../hooks/useFavorites';
+import { useScooter } from '../../hooks/useScooters';
 
 const { width, height } = Dimensions.get('window');
 
@@ -25,42 +27,40 @@ export default function ScooterDetailScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [scooter, setScooter] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [galleryModalVisible, setGalleryModalVisible] = useState(false);
   const galleryRef = React.useRef<FlatList>(null);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
-  useEffect(() => {
-    loadScooter();
-  }, [slug]);
+  // Use React Query hook
+  const { data: scooter, isLoading: loading } = useScooter(slug);
 
-  const loadScooter = async () => {
-    try {
-      setLoading(true);
-      const data = await getScooterBySlug(slug);
-      setScooter(data);
-      // Set default color (first color if available)
-      if (data?.attributes?.colors?.data?.length > 0) {
-        setSelectedColorId(data.attributes.colors.data[0].id);
-      }
-    } catch (error) {
-      console.error('Error loading scooter:', error);
-    } finally {
-      setLoading(false);
+  // Set default color when scooter data loads
+  React.useEffect(() => {
+    if (scooter?.attributes?.colors?.data?.length > 0 && !selectedColorId) {
+      setSelectedColorId(scooter.attributes.colors.data[0].id);
     }
-  };
+  }, [scooter, selectedColorId]);
 
   const handleBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.back();
   };
 
-  const toggleFavorite = () => {
+  const handleToggleFavorite = async () => {
+    if (!adaptedScooter) return;
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setIsFavorite(!isFavorite);
+    await toggleFavorite({
+      id: adaptedScooter.id,
+      slug: adaptedScooter.slug,
+      name: adaptedScooter.name,
+      image: adaptedScooter.image,
+      price: adaptedScooter.price,
+      category: adaptedScooter.category,
+      manufacturer: adaptedScooter.manufacturer,
+    });
   };
 
   const handleColorSelect = (colorId: number) => {
@@ -176,8 +176,8 @@ export default function ScooterDetailScreen() {
               <TouchableOpacity style={styles.headerButton} onPress={handleBack}>
                 <Ionicons name="arrow-back" size={24} color={themeColors.text} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.headerButton} onPress={toggleFavorite}>
-                <Text style={styles.favoriteIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
+              <TouchableOpacity style={styles.headerButton} onPress={handleToggleFavorite}>
+                <Text style={styles.favoriteIcon}>{isFavorite(adaptedScooter?.id || 0) ? '❤️' : '🤍'}</Text>
               </TouchableOpacity>
             </View>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors, spacing, typography, shadows } from '../constants/theme';
-import { getFeaturedScooters, getLatestScooters, getAllScooters } from '../lib/strapi';
-import { adaptStrapiScooters, Scooter } from '../lib/scooter-adapter';
+import { Scooter } from '../lib/scooter-adapter';
+import { useFavorites } from '../hooks/useFavorites';
+import { useAllScooters, useFeaturedScooters, useLatestScooters } from '../hooks/useScooters';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - spacing.xl * 3) / 2;
@@ -29,62 +30,77 @@ export default function AllScootersScreen() {
   }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [scooters, setScooters] = useState<Scooter[]>([]);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const { isFavorite, toggleFavorite } = useFavorites();
 
-  useEffect(() => {
-    loadScooters();
-  }, [section, category, manufacturer]);
+  // Use React Query hooks based on section
+  const {
+    data: allScootersData,
+    isLoading: allLoading,
+    refetch: refetchAll
+  } = useAllScooters(100);
 
-  const loadScooters = async (isRefreshing = false) => {
-    try {
-      if (isRefreshing) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
-      let data;
-      if (section === 'featured') {
-        data = await getFeaturedScooters();
-      } else if (section === 'latest') {
-        data = await getLatestScooters(20);
-      } else {
-        data = await getAllScooters(100);
-      }
+  const {
+    data: featuredData,
+    isLoading: featuredLoading,
+    refetch: refetchFeatured
+  } = useFeaturedScooters();
 
-      let filteredScooters = adaptStrapiScooters(data);
+  const {
+    data: latestData,
+    isLoading: latestLoading,
+    refetch: refetchLatest
+  } = useLatestScooters(20);
 
-      // Filter by category if provided
-      if (category) {
-        filteredScooters = filteredScooters.filter(scooter =>
-          scooter.categories?.some(cat => cat.slug === category)
-        );
-      }
+  // Determine which data to use based on section
+  const rawScooters = section === 'featured'
+    ? featuredData
+    : section === 'latest'
+    ? latestData
+    : allScootersData;
 
-      // Filter by manufacturer if provided
-      if (manufacturer) {
-        filteredScooters = filteredScooters.filter(scooter =>
-          scooter.manufacturer === manufacturer
-        );
-      }
+  const loading = section === 'featured'
+    ? featuredLoading
+    : section === 'latest'
+    ? latestLoading
+    : allLoading;
 
-      setScooters(filteredScooters);
-    } catch (error) {
-      console.error('Error loading scooters:', error);
-    } finally {
-      if (isRefreshing) {
-        setRefreshing(false);
-      } else {
-        setLoading(false);
-      }
+  // Filter scooters based on category and manufacturer
+  const scooters = React.useMemo(() => {
+    if (!rawScooters) return [];
+
+    let filtered = rawScooters;
+
+    // Filter by category if provided
+    if (category) {
+      filtered = filtered.filter(scooter =>
+        scooter.categories?.some(cat => cat.slug === category)
+      );
     }
-  };
 
-  const handleRefresh = () => {
+    // Filter by manufacturer if provided
+    if (manufacturer) {
+      filtered = filtered.filter(scooter =>
+        scooter.manufacturer === manufacturer
+      );
+    }
+
+    return filtered;
+  }, [rawScooters, category, manufacturer]);
+
+  const handleRefresh = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    loadScooters(true);
+    setRefreshing(true);
+
+    if (section === 'featured') {
+      await refetchFeatured();
+    } else if (section === 'latest') {
+      await refetchLatest();
+    } else {
+      await refetchAll();
+    }
+
+    setRefreshing(false);
   };
 
   const handleBack = () => {
@@ -97,16 +113,16 @@ export default function AllScootersScreen() {
     router.push(`/scooter/${scooter.slug}`);
   };
 
-  const toggleFavorite = (id: number) => {
+  const handleToggleFavorite = async (scooter: Scooter) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(id)) {
-        newFavorites.delete(id);
-      } else {
-        newFavorites.add(id);
-      }
-      return newFavorites;
+    await toggleFavorite({
+      id: scooter.id,
+      slug: scooter.slug,
+      name: scooter.name,
+      image: scooter.image,
+      price: scooter.price,
+      category: scooter.category,
+      manufacturer: scooter.manufacturer,
     });
   };
 
@@ -142,10 +158,10 @@ export default function AllScootersScreen() {
         )}
         <TouchableOpacity
           style={styles.favoriteButton}
-          onPress={() => toggleFavorite(item.id)}
+          onPress={() => handleToggleFavorite(item)}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Text style={styles.favoriteIcon}>{favorites.has(item.id) ? '❤️' : '🤍'}</Text>
+          <Text style={styles.favoriteIcon}>{isFavorite(item.id) ? '❤️' : '🤍'}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.cardContent}>
