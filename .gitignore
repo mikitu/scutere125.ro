@@ -54,3 +54,8 @@ apps/cms/export
 
 tmp/
 .env.render
+
+# React Native / Expo
+apps/mobile-app/ios
+apps/mobile-app/android
+apps/mobile-app/.expo
