@@ -47,14 +47,14 @@
       "expo-asset"
     ],
     "scheme": "scutere125",
-    "owner": "mikitu",
+    "owner": "mikitu78",
     "extra": {
       "eas": {
-        "projectId": "REPLACE_WITH_YOUR_EAS_PROJECT_ID"
+        "projectId": "7a51e795-024f-4a15-beeb-c72394b2db6d"
       }
     },
     "updates": {
-      "url": "https://u.expo.dev/REPLACE_WITH_YOUR_EAS_PROJECT_ID"
+      "url": "https://u.expo.dev/7a51e795-024f-4a15-beeb-c72394b2db6d"
     },
     "runtimeVersion": {
       "policy": "appVersion"
