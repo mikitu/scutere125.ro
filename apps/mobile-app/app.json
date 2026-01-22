@@ -18,15 +18,26 @@
       "supportsTablet": true,
       "bundleIdentifier": "ro.scutere125.app",
       "appleTeamId": "FH7KW33Z99",
-      "icon": "./assets/casca.png"
+      "icon": "./assets/casca.png",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "NSCameraUsageDescription": "Aplicația necesită acces la cameră pentru a face poze scuterelor tale.",
+        "NSPhotoLibraryUsageDescription": "Aplicația necesită acces la galerie pentru a selecta imagini."
+      }
     },
     "android": {
       "package": "ro.scutere125.app",
+      "versionCode": 1,
       "icon": "./assets/casca.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/casca.png",
         "backgroundColor": "#0a0a0a"
-      }
+      },
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
     },
     "web": {
       "favicon": "./assets/casca.png"
@@ -35,6 +46,18 @@
       "expo-router",
       "expo-asset"
     ],
-    "scheme": "scutere125"
+    "scheme": "scutere125",
+    "owner": "mikitu",
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_WITH_YOUR_EAS_PROJECT_ID"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/REPLACE_WITH_YOUR_EAS_PROJECT_ID"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
   }
 }
