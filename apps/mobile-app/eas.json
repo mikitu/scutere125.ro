@@ -10,6 +10,17 @@
         "simulator": true
       }
     },
+    "testing": {
+      "distribution": "internal",
+      "channel": "testing",
+      "ios": {
+        "simulator": false,
+        "buildConfiguration": "Release"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "preview": {
       "distribution": "internal",
       "channel": "preview",
