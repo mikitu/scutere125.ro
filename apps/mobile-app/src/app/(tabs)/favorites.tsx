@@ -48,7 +48,7 @@ export default function FavoritesScreen() {
               color={colors.textSecondary}
             />
           </View>
-          <Text style={styles.emptyTitle}>Nicio scuteră salvată</Text>
+          <Text style={styles.emptyTitle}>Nici un scuter salvat</Text>
           <Text style={styles.emptyDescription}>
             Apasă pe ❤️ pentru a salva{'\n'}scuterele tale preferate
           </Text>

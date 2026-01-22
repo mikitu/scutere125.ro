@@ -29,11 +29,22 @@ export default function TabLayout() {
         headerShown: false,
         tabBarActiveTintColor: '#FF453A',
         tabBarInactiveTintColor: '#8E8E93',
-        tabBarStyle: {
-          position: 'absolute',
-          backgroundColor: 'transparent',
-          borderTopWidth: 0,
-        },
+        tabBarStyle: Platform.select({
+          ios: {
+            position: 'absolute',
+            backgroundColor: 'transparent',
+            borderTopWidth: 0,
+          },
+          android: {
+            position: 'absolute',
+            backgroundColor: '#1c1c1e',
+            borderTopWidth: 1,
+            borderTopColor: '#2c2c2e',
+            elevation: 0,
+            height: 60,
+            paddingBottom: 8,
+          },
+        }),
         tabBarBackground: () =>
           Platform.OS === 'ios' ? (
             <BlurView intensity={60} tint="dark" style={{ flex: 1 }} />
