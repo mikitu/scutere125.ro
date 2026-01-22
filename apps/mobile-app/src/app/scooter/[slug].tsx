@@ -18,6 +18,7 @@ import { colors as themeColors, spacing, typography, shadows } from '../../const
 import { getImageUrls, StrapiScooterColor } from '../../lib/strapi';
 import { adaptStrapiScooter, Scooter } from '../../lib/scooter-adapter';
 import { ImageGalleryModal } from '../../components/ImageGalleryModal';
+import { OrderModal } from '../../components/OrderModal';
 import { useFavorites } from '../../hooks/useFavorites';
 import { useScooter } from '../../hooks/useScooters';
 
@@ -30,6 +31,7 @@ export default function ScooterDetailScreen() {
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [galleryModalVisible, setGalleryModalVisible] = useState(false);
+  const [orderModalVisible, setOrderModalVisible] = useState(false);
   const galleryRef = React.useRef<FlatList>(null);
   const { isFavorite, toggleFavorite } = useFavorites();
 
@@ -74,6 +76,11 @@ export default function ScooterDetailScreen() {
   const handleImagePress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setGalleryModalVisible(true);
+  };
+
+  const handleOrderPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setOrderModalVisible(true);
   };
 
   if (loading) {
@@ -297,6 +304,27 @@ export default function ScooterDetailScreen() {
           initialIndex={currentImageIndex}
           onClose={() => setGalleryModalVisible(false)}
         />
+
+        {/* Order Modal */}
+        <OrderModal
+          visible={orderModalVisible}
+          onClose={() => setOrderModalVisible(false)}
+          scooterName={adaptedScooter.name}
+          scooterPrice={adaptedScooter.price}
+          selectedColor={scooterColors.find(c => c.id === selectedColorId)?.attributes.name}
+        />
+
+        {/* Fixed CTA Button */}
+        <View style={[styles.ctaContainer, { paddingBottom: insets.bottom + spacing.md }]}>
+          <TouchableOpacity
+            style={styles.ctaButton}
+            onPress={handleOrderPress}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="cart-outline" size={24} color={themeColors.background} />
+            <Text style={styles.ctaButtonText}>Cere Ofertă</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
@@ -520,6 +548,32 @@ const styles = StyleSheet.create({
   },
   colorNameSelected: {
     color: themeColors.accent,
+    fontWeight: '600',
+  },
+  ctaContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    backgroundColor: themeColors.background,
+    borderTopWidth: 1,
+    borderTopColor: themeColors.systemGray5,
+  },
+  ctaButton: {
+    backgroundColor: themeColors.accent,
+    borderRadius: 12,
+    paddingVertical: spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+    ...shadows.card,
+  },
+  ctaButtonText: {
+    ...typography.headline,
+    color: themeColors.background,
     fontWeight: '600',
   },
 });

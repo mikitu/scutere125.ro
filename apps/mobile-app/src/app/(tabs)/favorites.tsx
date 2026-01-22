@@ -44,14 +44,22 @@ export default function FavoritesScreen() {
           <View style={styles.emptyIconContainer}>
             <Ionicons
               name="heart-outline"
-              size={56}
+              size={64}
               color={colors.textSecondary}
             />
           </View>
-          <Text style={styles.emptyTitle}>Nicio scuter favorită</Text>
+          <Text style={styles.emptyTitle}>Nicio scuteră salvată</Text>
           <Text style={styles.emptyDescription}>
-            Explorează catalogul și adaugă{'\n'}scuterele tale preferate aici
+            Apasă pe ❤️ pentru a salva{'\n'}scuterele tale preferate
           </Text>
+          <TouchableOpacity
+            style={styles.emptyButton}
+            onPress={() => router.push('/search')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="search" size={20} color={colors.background} />
+            <Text style={styles.emptyButtonText}>Explorează Catalogul</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.favoritesList}>
@@ -139,6 +147,22 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 24,
+    marginBottom: spacing.xl,
+  },
+  emptyButton: {
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.xl,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    ...shadows.card,
+  },
+  emptyButtonText: {
+    ...typography.headline,
+    color: colors.background,
+    fontWeight: '600',
   },
   favoritesList: {
     paddingHorizontal: spacing.xl,

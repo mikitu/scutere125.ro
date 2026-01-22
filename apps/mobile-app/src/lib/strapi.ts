@@ -1,6 +1,20 @@
+import { getDeviceId } from './deviceId';
+
 // Strapi API URL - change this to your production URL when deploying
 const STRAPI_URL = process.env.EXPO_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
+/**
+ * Create headers with device ID for all requests
+ */
+async function createHeaders(): Promise<HeadersInit> {
+  const deviceId = await getDeviceId();
+
+  return {
+    'Content-Type': 'application/json',
+    'X-Device-ID': deviceId,
+    'X-Client-Platform': 'mobile-app',
+  };
+}
 interface StrapiImage {
   id: number;
   attributes: {
@@ -89,18 +103,14 @@ interface StrapiResponse<T> {
 
 async function fetchAPI<T>(path: string): Promise<T> {
   const url = `${STRAPI_URL}/api${path}`;
-  
+
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const headers = await createHeaders();
+    const response = await fetch(url, { headers });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
     return await response.json();
   } catch (error) {
     console.error('Strapi API Error:', error);
