@@ -93,7 +93,7 @@ export default function HomeScreen() {
         }
       >
         {/* Header with Logo */}
-        <View style={[styles.header, { paddingTop: insets.top + spacing.md }]}>
+        <View style={[styles.header, { paddingTop: insets.top }]}>
           <View style={styles.logoContainer}>
             <HelmetIcon size={40} />
             <MaskedView
