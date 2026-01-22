@@ -2,9 +2,21 @@ import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { SymbolView } from 'expo-symbols';
+import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// SF Symbols for tab bar icons with animation
-function TabBarIcon({ focused, name }: { focused: boolean; name: string }) {
+// Tab bar icons - SF Symbols for iOS, Ionicons for Android
+function TabBarIcon({ focused, name, ioniconsName }: { focused: boolean; name: string; ioniconsName?: string }) {
+  if (Platform.OS === 'android') {
+    return (
+      <Ionicons
+        name={ioniconsName as any}
+        size={24}
+        color={focused ? '#FF453A' : '#8E8E93'}
+      />
+    );
+  }
+
   return (
     <SymbolView
       name={name}
@@ -23,6 +35,8 @@ function TabBarIcon({ focused, name }: { focused: boolean; name: string }) {
 }
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
@@ -41,8 +55,8 @@ export default function TabLayout() {
             borderTopWidth: 1,
             borderTopColor: '#2c2c2e',
             elevation: 0,
-            height: 60,
-            paddingBottom: 8,
+            height: 60 + insets.bottom,
+            paddingBottom: insets.bottom,
           },
         }),
         tabBarBackground: () =>
@@ -56,7 +70,11 @@ export default function TabLayout() {
         options={{
           title: 'Acasă',
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="house.fill" />
+            <TabBarIcon
+              focused={focused}
+              name="house.fill"
+              ioniconsName={focused ? 'home' : 'home-outline'}
+            />
           ),
         }}
       />
@@ -65,7 +83,11 @@ export default function TabLayout() {
         options={{
           title: 'Caută',
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="magnifyingglass" />
+            <TabBarIcon
+              focused={focused}
+              name="magnifyingglass"
+              ioniconsName={focused ? 'search' : 'search-outline'}
+            />
           ),
         }}
       />
@@ -74,7 +96,11 @@ export default function TabLayout() {
         options={{
           title: 'Favorite',
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name={focused ? 'heart.fill' : 'heart'} />
+            <TabBarIcon
+              focused={focused}
+              name={focused ? 'heart.fill' : 'heart'}
+              ioniconsName={focused ? 'heart' : 'heart-outline'}
+            />
           ),
         }}
       />
@@ -83,7 +109,11 @@ export default function TabLayout() {
         options={{
           title: 'Profil',
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name={focused ? 'person.fill' : 'person'} />
+            <TabBarIcon
+              focused={focused}
+              name={focused ? 'person.fill' : 'person'}
+              ioniconsName={focused ? 'person' : 'person-outline'}
+            />
           ),
         }}
       />
