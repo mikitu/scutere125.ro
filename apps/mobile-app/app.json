@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Scutere125",
-    "slug": "scutere125",
+    "slug": "scutere-125",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
@@ -23,7 +23,8 @@
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "NSCameraUsageDescription": "Aplicația necesită acces la cameră pentru a face poze scuterelor tale.",
-        "NSPhotoLibraryUsageDescription": "Aplicația necesită acces la galerie pentru a selecta imagini."
+        "NSPhotoLibraryUsageDescription": "Aplicația necesită acces la galerie pentru a selecta imagini.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {

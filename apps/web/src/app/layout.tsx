@@ -21,17 +21,26 @@ export const metadata: Metadata = {
   keywords: "scutere 125cc, scutere accesibile, scutere calitate, B125, permis B, Honda scutere, Yamaha scutere, SH Mode 125, PCX 125, Forza 125, scutere Romania",
   authors: [{ name: "Scutere125.ro" }],
   openGraph: {
-    title: "Scutere125.ro | Scutere de calitate și accesibile conform legii B125",
-    description: "Descoperă cele mai bune scutere 125cc pentru permis B125. Pe drum, cu încredere!",
+    title: "Scutere 125cc • Mobilitate urbană",
+    description: "Descoperă scutere 125cc legale cu permis B (B125). Economice, fiabile și perfecte pentru oraș.",
     url: "https://scutere125.ro",
     siteName: "Scutere125.ro",
     locale: "ro_RO",
     type: "website",
+    images: [
+      {
+        url: "/images/scutere125-og.png",
+        width: 1200,
+        height: 800,
+        alt: "Scutere 125cc • Mobilitate urbană",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Scutere125.ro | Scutere de calitate și accesibile conform legii B125",
-    description: "Descoperă cele mai bune scutere 125cc pentru permis B125. Pe drum, cu încredere!",
+    title: "Scutere 125cc • Mobilitate urbană",
+    description: "Descoperă scutere 125cc legale cu permis B (B125). Economice, fiabile și perfecte pentru oraș.",
+    images: ["/images/scutere125-og.png"],
   },
   robots: {
     index: true,
